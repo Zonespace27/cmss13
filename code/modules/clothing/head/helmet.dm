@@ -826,11 +826,6 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	flags_marine_helmet = HELMET_DAMAGE_OVERLAY
 	unacidable = TRUE
 
-/obj/item/clothing/head/helmet/marine/pmc_recruit
-	name = "\improper M10-WY pattern marine helmet"
-	desc = "A standard M10 Pattern Helmet. The inside label, along with washing information, reads, 'The difference between an open-casket and closed-casket funeral. Wear on head for best results.'. There is a built-in camera on the right side. This one is in a Weyland-Yutani PMC paintjob."
-	icon_state = "wy_helmet"
-
 /obj/item/clothing/head/helmet/marine/veteran/PMC/recruit
 	name = "\improper PMC recruit tactical cap"
 	armor_melee = CLOTHING_ARMOR_MEDIUM
