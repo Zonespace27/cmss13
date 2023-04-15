@@ -9,29 +9,22 @@
 	var/roundstart_damage_max = 0
 	var/roundstart_damage_times = 1
 
+	var/spawn_priority = LOWEST_SPAWN_PRIORITY
+
 /obj/effect/landmark/survivor_spawner/Initialize(mapload, ...)
 	. = ..()
-	GLOB.survivor_spawns += src
+	LAZYINITLIST(GLOB.survivor_spawns_by_priority["[spawn_priority]"])
+	GLOB.survivor_spawns_by_priority["[spawn_priority]"] += src
 
 /obj/effect/landmark/survivor_spawner/Destroy()
-	GLOB.survivor_spawns -= src
+	GLOB.survivor_spawns_by_priority["[spawn_priority]"] -= src
 	return ..()
 
-/obj/effect/landmark/survivor_spawner/proc/check_can_spawn(var/mob/living/carbon/human/survivor)
+/obj/effect/landmark/survivor_spawner/proc/check_can_spawn(mob/living/carbon/human/survivor)
 	// prevents stacking survivors on top of eachother
 	if(locate(/mob/living/carbon/human) in loc)
 		return FALSE
 	return TRUE
-
-/obj/effect/landmark/survivor_spawner/lv624_skylight
-	intro_text = list("<h2>You are a survivor!</h2>",\
-	"<span class='notice'>You are a survivor of the attack on the colony. You worked or lived in the archaeology colony, and managed to avoid the alien attacks...until now.</span>",\
-	"<span class='notice'>You are fully aware of the xenomorph threat and are able to use this knowledge as you see fit.</span>",\
-	"<span class='danger'>Your primary objective is to heal up and survive until marines rescue you. If you want to assault the hive - adminhelp.</span>")
-	story_text = "You with a small group made a run for the caves after an attack on the colony. Unfortunately during the escape you all got ambushed by one of the xenomorphs. Limping away, you and your friends found a shelter in the caves, in a place with a nice skylight above. You mustered a defence, ignoring wounds that creature dealt to you. It will be a good idea to heal up, before you attempt anything."
-	roundstart_damage_min = 3
-	roundstart_damage_max = 10
-	roundstart_damage_times = 3
 
 /obj/effect/landmark/survivor_spawner/lv624_crashed_clf
 	equipment = /datum/equipment_preset/survivor/clf
@@ -44,6 +37,8 @@
 	roundstart_damage_max = 10
 	roundstart_damage_times = 2
 
+	spawn_priority = SPAWN_PRIORITY_VERY_HIGH
+
 /obj/effect/landmark/survivor_spawner/bigred_crashed_pmc
 	equipment = /datum/equipment_preset/survivor/pmc
 	synth_equipment = /datum/equipment_preset/pmc/synth
@@ -54,6 +49,8 @@
 	roundstart_damage_min = 3
 	roundstart_damage_max = 10
 	roundstart_damage_times = 2
+
+	spawn_priority = SPAWN_PRIORITY_HIGH
 
 /obj/effect/landmark/survivor_spawner/bigred_crashed_cl
 	equipment = /datum/equipment_preset/survivor/wy/manager
@@ -66,20 +63,27 @@
 	roundstart_damage_max = 10
 	roundstart_damage_times = 2
 
+	spawn_priority = SPAWN_PRIORITY_VERY_HIGH
+
 
 //Military Survivors//
 
 /obj/effect/landmark/survivor_spawner/lv522_forecon_tech
 	equipment = /datum/equipment_preset/survivor/forecon/tech
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
 
 /obj/effect/landmark/survivor_spawner/lv522_forecon_marksman
 	equipment = /datum/equipment_preset/survivor/forecon/marksman
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
 
 /obj/effect/landmark/survivor_spawner/lv522_forecon_smartgunner
 	equipment = /datum/equipment_preset/survivor/forecon/smartgunner
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
 
 /obj/effect/landmark/survivor_spawner/lv522_forecon_grenadier
 	equipment = /datum/equipment_preset/survivor/forecon/grenadier
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
 
 /obj/effect/landmark/survivor_spawner/lv522_forecon_squad_leader
 	equipment = /datum/equipment_preset/survivor/forecon/squad_leader
+	spawn_priority = SPAWN_PRIORITY_HIGH

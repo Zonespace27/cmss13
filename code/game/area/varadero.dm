@@ -10,6 +10,7 @@
 	can_build_special = TRUE //T-Comms structure
 	temperature = TROPICAL_TEMP
 	lighting_use_dynamic = TRUE
+	minimap_color = MINIMAP_AREA_COLONY
 
 //shuttle stuff
 
@@ -19,6 +20,7 @@
 	icon = 'icons/turf/area_varadero.dmi'
 	lighting_use_dynamic = TRUE
 	is_resin_allowed = FALSE
+	minimap_color = MINIMAP_AREA_LZ
 
 
 /area/shuttle/drop2/varadero
@@ -27,6 +29,7 @@
 	icon = 'icons/turf/area_varadero.dmi'
 	lighting_use_dynamic = TRUE
 	is_resin_allowed = FALSE
+	minimap_color = MINIMAP_AREA_LZ
 
 //Parent areas
 
@@ -65,6 +68,17 @@
 
 /area/varadero/exterior/comms4
 	name = "New Varadero - Walkway Extension"
+	icon_state = "comms4"
+
+/area/varadero/exterior/eastbeach
+	name = "New Varadero - East Beach"
+	icon_state = "varadero1"
+
+/area/varadero/exterior/eastocean
+	name = "New Varadero - East Ocean"
+	is_resin_allowed = FALSE
+	flags_area = AREA_NOTUNNEL
+	icon_state = "varadero2"
 
 /area/varadero/interior/oob
 	name = "New Varadero - Out Of Bounds"
@@ -79,11 +93,13 @@
 	name = "New Varadero - Pontoon Dock"
 	requires_power = FALSE
 	is_resin_allowed = FALSE
+	minimap_color = MINIMAP_AREA_LZ
 
 /area/varadero/exterior/lz1_console/two
 	name = "New Varadero - Palm Airfield"
 	requires_power = FALSE
 	is_resin_allowed = FALSE
+	minimap_color = MINIMAP_AREA_LZ
 
 //exterior areas
 
@@ -91,11 +107,13 @@
 	name = "New Varadero - Pontoon Airfield"
 	icon_state = "lz1"
 	is_resin_allowed = FALSE
+	minimap_color = MINIMAP_AREA_LZ
 
 /area/varadero/exterior/lz2_near
 	name = "New Varadero - Palm Airfield"
 	icon_state = "lz2"
 	is_resin_allowed = FALSE
+	minimap_color = MINIMAP_AREA_LZ
 
 /area/varadero/exterior/pontoon_beach
 	name = "New Varadero - Rockabilly Beach"
@@ -108,6 +126,7 @@
 	name = "New Varadero - Cargo"
 	icon_state = "req0"
 	is_resin_allowed = FALSE
+	minimap_color = MINIMAP_AREA_ENGI
 
 /area/varadero/interior/hall_NW
 	name = "New Varadero - Hallway NW"
@@ -156,6 +175,7 @@
 /area/varadero/interior/research
 	name = "New Varadero - Research Offices"
 	icon_state = "offices4"
+	minimap_color = MINIMAP_AREA_RESEARCH
 
 /area/varadero/interior/electrical
 	name = "New Varadero - Electrical Annex"
@@ -218,10 +238,12 @@
 	power_environ = FALSE
 	luminosity = 0
 	lighting_use_dynamic = 1
+	minimap_color = MINIMAP_AREA_CAVES
 
 /area/varadero/interior/caves/north_research
 	name = "New Varadero - North Research Caves"
 	icon_state = "tunnels4"
+	minimap_color = MINIMAP_AREA_RESEARCH_CAVE
 
 /area/varadero/interior/caves/east
 	name = "New Varadero - Beach Caves"
@@ -235,6 +257,7 @@
 	power_environ = FALSE
 	luminosity = 0
 	lighting_use_dynamic = 1
+	minimap_color = MINIMAP_AREA_RESEARCH_CAVE
 
 
 /area/varadero/interior_protected/caves/central
@@ -252,5 +275,6 @@
 /area/varadero/interior_protected/vessel
 	name = "New Varadero - Unknown Vessel"
 	icon_state = "predship"
+	minimap_color = MINIMAP_AREA_SHIP
 
 

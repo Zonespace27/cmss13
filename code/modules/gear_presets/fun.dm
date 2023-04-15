@@ -24,7 +24,7 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/bandana(H), WEAR_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/clothing/glasses/eyepatch(H), WEAR_EYES)
 
-	H.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/pirate(H), WEAR_L_HAND)
+	H.equip_to_slot_or_del(new /obj/item/weapon/energy/sword/pirate(H), WEAR_L_HAND)
 
 	H.equip_to_slot(new /obj/item/attachable/bayonet(H), WEAR_L_STORE)
 	H.equip_to_slot(new /obj/item/device/flashlight(H), WEAR_R_STORE)
@@ -47,7 +47,7 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/pirate(H), WEAR_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/clothing/glasses/eyepatch(H), WEAR_EYES)
 
-	H.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/pirate(H), WEAR_L_HAND)
+	H.equip_to_slot_or_del(new /obj/item/weapon/energy/sword/pirate(H), WEAR_L_HAND)
 
 	H.equip_to_slot(new /obj/item/attachable/bayonet(H), WEAR_L_STORE)
 	H.equip_to_slot(new /obj/item/device/flashlight(H), WEAR_R_STORE)
@@ -69,212 +69,6 @@
 	H.equip_to_slot(new /obj/item/device/flashlight(H), WEAR_R_STORE)
 
 //*****************************************************************************************************/
-/datum/equipment_preset/fun/dutch
-	name = JOB_DUTCH_RIFLEMAN
-	paygrade = "DTC"
-	assignment = JOB_DUTCH_RIFLEMAN
-	flags = EQUIPMENT_PRESET_EXTRA
-	faction = FACTION_DUTCH
-
-	skills = /datum/skills/dutchmerc
-
-/datum/equipment_preset/fun/dutch/New()
-	..()
-	rank = assignment
-
-/datum/equipment_preset/fun/dutch/load_name(mob/living/carbon/human/H, var/randomise)
-	H.gender = pick(60;MALE,40;FEMALE)
-	var/datum/preferences/A = new()
-	A.randomize_appearance(H)
-	var/random_name
-	if(H.gender == MALE)
-		random_name = "[pick(first_names_male_dutch)] [pick(last_names)]"
-		H.f_style = "5 O'clock Shadow"
-	else
-		random_name = "[pick(first_names_female_dutch)] [pick(last_names)]"
-
-	H.change_real_name(H, random_name)
-	H.age = rand(25,35)
-	H.r_hair = rand(10,30)
-	H.g_hair = rand(10,30)
-	H.b_hair = rand(20,50)
-	H.r_eyes = rand(129,149)
-	H.g_eyes = rand(52,72)
-	H.b_eyes = rand(9,29)
-	idtype = /obj/item/card/id/dogtag
-
-/datum/equipment_preset/fun/dutch/load_gear(mob/living/carbon/human/H)
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/marine/veteran/dutch(H), WEAR_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset/distress/dutch(H), WEAR_L_EAR)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/marine/veteran/dutch(H), WEAR_BODY)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/marine/veteran/dutch(H), WEAR_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/rifle/m16/dutch(H), WEAR_J_STORE)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/m16/ap(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/m16/ap(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/storage/backpack/lightpack(H), WEAR_BACK)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/regular(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/device/motiondetector(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/pistol/m1911(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m1911(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m1911(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/belt/marine/dutch/m16/ap(H), WEAR_WAIST)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran(H), WEAR_HANDS)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/magazine/large/m16/ap(H), WEAR_L_STORE)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/firstaid/ert(H), WEAR_R_STORE)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/marine/jungle/knife(H), WEAR_FEET)
-
-	to_chat(H, SPAN_WARNING("You are a member of the Dutch's Dozen! You are fully aware of anything and everything regarding the Yautja, down to every minute detail. The Yautja mask in your leader's backpack serves to let the Yautja track you, or for you to place traps. The Yautja can detect their gear signatures, and will track this mask as soon as you arrive. The EMP grenades in your backpack have a very wide area range. They will interrupt Predator cloak and consume their bracer charge. REMEMBER: Your objective is to hunt, kill and loot the Predators planetside, and NOT hunt Xenomorphs. You have a very wide variety of skills, put them to use!"))
-
-/datum/equipment_preset/fun/dutch/minigun
-	name = JOB_DUTCH_MINIGUNNER
-	paygrade = "DTCMG"
-	assignment = JOB_DUTCH_MINIGUNNER
-	flags = EQUIPMENT_PRESET_EXTRA
-
-	skills = /datum/skills/dutchmerc
-
-/datum/equipment_preset/fun/dutch/minigun/load_gear(mob/living/carbon/human/H)
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/marine/veteran/dutch(H), WEAR_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset/distress/dutch(H), WEAR_L_EAR)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/marine/veteran/dutch(H), WEAR_BODY)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/marine/veteran/dutch(H), WEAR_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/minigun(H), WEAR_J_STORE)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/storage/backpack/lightpack(H), WEAR_BACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/minigun(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/minigun(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/minigun(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/minigun(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/regular(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/belt/gun/m4a3/m1911(H), WEAR_WAIST)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran(H), WEAR_HANDS)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/firstaid/ert(H), WEAR_R_STORE)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/explosive/emp_dutch(H), WEAR_L_STORE)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/marine/jungle/knife(H), WEAR_FEET)
-
-	to_chat(H, SPAN_WARNING("You are a member of the Dutch's Dozen! You are fully aware of anything and everything regarding the Yautja, down to every minute detail.  The Yautja mask in your leader's backpack serves to let the Yautja track you, or for you to place traps. The Yautja can detect their gear signatures,  and will track this mask as soon as you arrive. The EMP grenades in your backpack have a very wide area range. They will interrupt Predator cloak and consume their bracer charge. REMEMBER: Your objective is to hunt, kill and loot the Predators planetside, and NOT hunt Xenomorphs."))
-
-/datum/equipment_preset/fun/dutch/flamer
-	name = JOB_DUTCH_FLAMETHROWER
-	paygrade = "DTCF"
-	assignment = JOB_DUTCH_FLAMETHROWER
-	flags = EQUIPMENT_PRESET_EXTRA
-
-	skills = /datum/skills/dutchmerc
-
-/datum/equipment_preset/fun/dutch/flamer/load_gear(mob/living/carbon/human/H)
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/marine/veteran/dutch(H), WEAR_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset/distress/dutch(H), WEAR_L_EAR)
-	//jumpsuit
-	var/obj/item/clothing/under/marine/veteran/dutch/DUTCH = new()
-	var/obj/item/clothing/accessory/storage/webbing/W = new()
-	DUTCH.attach_accessory(H, W)
-	H.equip_to_slot_or_del(DUTCH, WEAR_BODY)
-	for(var/i in 1 to W.hold.storage_slots)
-		H.equip_to_slot_or_del(new /obj/item/ammo_magazine/m60, WEAR_IN_ACCESSORY)
-	//---
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/marine/veteran/dutch(H), WEAR_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/m60, WEAR_J_STORE)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/storage/large_holster/fuelpack(H), WEAR_BACK)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/flamer/M240T(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/belt/gun/m4a3/m1911(H), WEAR_WAIST)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran(H), WEAR_HANDS)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/flamertank(H), WEAR_L_STORE)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/flamer_tank/large/X(H), WEAR_IN_L_STORE)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/flamer_tank/large/B(H), WEAR_IN_L_STORE)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/firstaid/ert(H), WEAR_R_STORE)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/marine/jungle/knife(H), WEAR_FEET)
-
-	to_chat(H, SPAN_WARNING("You are a member of the Dutch's Dozen! You are fully aware of anything and everything regarding the Yautja, down to every minute detail.  The Yautja mask in your leader's backpack serves to let the Yautja track you, or for you to place traps. The Yautja can detect their gear signatures,  and will track this mask as soon as you arrive. The EMP grenades in your backpack have a very wide area range. They will interrupt Predator cloak and consume their bracer charge. REMEMBER: Your objective is to hunt, kill and loot the Predators planetside, and NOT hunt Xenomorphs."))
-
-/datum/equipment_preset/fun/dutch/medic
-	name = JOB_DUTCH_MEDIC
-	paygrade = "DTCM"
-	assignment = JOB_DUTCH_MEDIC
-	flags = EQUIPMENT_PRESET_EXTRA
-
-	skills = /datum/skills/dutchmedic
-
-/datum/equipment_preset/fun/dutch/medic/load_gear(mob/living/carbon/human/H)
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/marine/veteran/dutch(H), WEAR_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset/distress/dutch(H), WEAR_L_EAR)
-	if(H.disabilities & NEARSIGHTED)
-		H.equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/health/prescription(H), WEAR_EYES)
-	else
-		H.equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/health(H), WEAR_EYES)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/marine/veteran/dutch(H), WEAR_BODY)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/marine/veteran/dutch(H), WEAR_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/rifle/m16/dutch(H), WEAR_J_STORE)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/storage/backpack/lightpack(H), WEAR_BACK)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/empgrenade/dutch(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/device/defibrillator/compact_adv(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/device/motiondetector(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/tool/surgery/surgical_line(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/tool/surgery/synthgraft(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/box/packet/smoke(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv(H), WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/roller, WEAR_IN_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/belt/medical/lifesaver/full/dutch(H), WEAR_WAIST)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran(H), WEAR_HANDS)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/magazine/large/m16/ap(H), WEAR_L_STORE)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/medkit/full_advanced(H), WEAR_R_STORE)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/marine/jungle/knife(H), WEAR_FEET)
-
-	to_chat(H, SPAN_WARNING("You are a medic of the Dutch's Dozen! You are fully aware of anything and everything regarding the Yautja, down to every minute detail.  The Yautja mask in your leader's backpack serves to let the Yautja track you, or for you to place traps. The Yautja can detect their gear signatures,  and will track this mask as soon as you arrive. The EMP grenades in your backpack have a very wide area range. They will interrupt Predator cloak and consume their bracer charge. REMEMBER: Your objective is to help your team members hunt, kill and loot the Predators planetside, and NOT hunt Xenomorphs."))
-
-/datum/equipment_preset/fun/dutch/arnie
-	name = "Dutch's Dozen - Arnold"
-	paygrade = "ARN"
-	assignment = JOB_DUTCH_ARNOLD
-	flags = EQUIPMENT_PRESET_EXTRA
-
-	skills = /datum/skills/dutch
-	idtype = /obj/item/card/id/gold
-
-/datum/equipment_preset/fun/dutch/arnie/load_name(mob/living/carbon/human/H, var/randomise)
-	H.gender = MALE
-	H.change_real_name(H, "Arnold 'Dutch' Schäfer")
-	H.f_style = "5 O'clock Shadow"
-	H.h_style = "Mulder"
-
-	H.age = 38
-	H.r_hair = 15
-	H.g_hair = 15
-	H.b_hair = 25
-	H.r_eyes = 139
-	H.g_eyes = 62
-	H.b_eyes = 19
-	idtype = /obj/item/card/id/gold
-
-/datum/equipment_preset/fun/dutch/arnie/load_gear(mob/living/carbon/human/H)
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/marine/veteran/dutch/cap(H), WEAR_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset/distress/dutch(H), WEAR_L_EAR)
-	H.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/empproof(H), WEAR_EYES)
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/yautja/hunter(H), WEAR_FACE)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/marine/veteran/dutch(H), WEAR_BODY)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/marine/veteran/dutch(H), WEAR_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/rifle/m16/dutch(H), WEAR_J_STORE)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/m16/ap(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/m16/ap(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/storage/large_holster/machete/arnold/full(H), WEAR_BACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/belt/marine/dutch/m16/ap(H), WEAR_WAIST)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran(H), WEAR_HANDS)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/explosive/emp_dutch(H), WEAR_L_STORE)
-	H.equip_to_slot_or_del(new /obj/item/storage/pouch/medical/socmed/dutch(H), WEAR_R_STORE)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/marine/jungle/knife(H), WEAR_FEET)
-
-	H.set_species("Human Hero") //Arnold is STRONG.
-
-	to_chat(H, SPAN_WARNING("You are Dutch, the leader of the Dutch's Dozen! You are fully aware of anything and everything regarding the Yautja, down to every minute detail. The Yautja mask on your face serves to let the Yautja track you, or for you to place traps. The Yautja can detect their gear signatures,  and will track this mask as soon as you arrive. The EMP grenades in your pouch have a very wide area range. They will interrupt Predator cloak and consume their bracer charge. REMEMBER: Your objective is to hunt, kill and loot the Predators planetside, and NOT hunt Xenomorphs."))
 
 /datum/equipment_preset/fun/hefa
 	name = "HEFA Knight"
@@ -297,7 +91,7 @@
 	..()
 	H.skills.set_skill(SKILL_SPEC_WEAPONS, SKILL_SPEC_GRENADIER)
 
-/datum/equipment_preset/fun/hefa/load_name(mob/living/carbon/human/H, var/randomise)
+/datum/equipment_preset/fun/hefa/load_name(mob/living/carbon/human/H, randomise)
 	H.gender = MALE
 	var/list/names = list(
 		"Lancelot", "Gawain", "Geraint", "Percival", "Bors", "Lamorak", "Kay", "Gareth", "Bedivere", "Gaheris", "Galahad", "Tristan", "Palamedes",
@@ -346,38 +140,38 @@
 				qdel(G)
 			launcher.cylinder.storage_slots = launcher.internal_slots //need to adjust the internal storage as well.
 			for(var/i = 1 to launcher.internal_slots)
-				new /obj/item/explosive/grenade/HE/frag(launcher.cylinder)
+				new /obj/item/explosive/grenade/high_explosive/frag(launcher.cylinder)
 			launcher.fire_delay = FIRE_DELAY_TIER_4 //More HEFA per second, per second. Strictly speaking this is probably a nerf.
 
 	// Satchel
 	if(satchel_success)
 		for(var/i in 1 to 7)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.back), WEAR_IN_BACK)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.back), WEAR_IN_BACK)
 
 	// Belt
 	if(waist_success)
 		var/obj/item/storage/belt/grenade/large/belt = H.belt
 		belt.name = "M42 HEFA rig Mk. XVII"
 		for(var/i in 1 to belt.storage_slots)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.belt), WEAR_IN_BELT)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.belt), WEAR_IN_BELT)
 
 	// Armor/suit
 	if(jacket_success)
 		var/obj/item/clothing/suit/storage/marine/M3G/armor = H.wear_suit
 		armor.name = "HEFA Knight armor"
 		for(var/i in 1 to armor.storage_slots)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.wear_suit), WEAR_IN_JACKET)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.wear_suit), WEAR_IN_JACKET)
 
 	// Pouch
 	if(pouch_r_success)
 		var/obj/item/storage/pouch/explosive/pouch = H.r_store
 		pouch.name = "HEFA pouch"
 		for(var/i in 1 to pouch.storage_slots)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.r_store), WEAR_IN_R_STORE)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.r_store), WEAR_IN_R_STORE)
 
 	// Webbing
 	for(var/i in 1 to W.hold.storage_slots)
-		H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.back), WEAR_IN_ACCESSORY)
+		H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.back), WEAR_IN_ACCESSORY)
 
 /datum/equipment_preset/fun/hefa/melee
 	name = "HEFA Knight - Melee"
@@ -397,8 +191,8 @@
 	var/satchel_success = H.equip_to_slot_or_del(new /obj/item/storage/backpack/marine/satchel(H), WEAR_BACK)
 	var/waist_success = H.equip_to_slot_or_del(new /obj/item/storage/belt/grenade/large(H), WEAR_WAIST)
 	var/pouch_r_success = H.equip_to_slot_or_del(new /obj/item/storage/pouch/explosive(H), WEAR_R_STORE)
-	H.equip_to_slot_or_del(new /obj/item/weapon/melee/claymore/hefa(H), WEAR_R_HAND)
-	H.equip_to_slot_or_del(new /obj/item/weapon/melee/claymore/hefa(H), WEAR_IN_BACK)
+	H.equip_to_slot_or_del(new /obj/item/weapon/claymore/hefa(H), WEAR_R_HAND)
+	H.equip_to_slot_or_del(new /obj/item/weapon/claymore/hefa(H), WEAR_IN_BACK)
 
 	if(shoes_success)
 		var/obj/item/clothing/shoes/marine/knife/shoes = H.shoes
@@ -411,32 +205,32 @@
 		var/obj/item/storage/backpack/marine/satchel = H.back
 		satchel.name = "HEFA storage bag"
 		for(var/i in 1 to 7)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.back), WEAR_IN_BACK)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.back), WEAR_IN_BACK)
 
 	// Belt
 	if(waist_success)
 		var/obj/item/storage/belt/grenade/large/belt = H.belt
 		belt.name = "M42 HEFA rig Mk. XVII"
 		for(var/i in 1 to belt.storage_slots)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.belt), WEAR_IN_BELT)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.belt), WEAR_IN_BELT)
 
 	// Armor/suit
 	if(jacket_success)
 		var/obj/item/clothing/suit/storage/marine/M3G/armor = H.wear_suit
 		armor.name = "HEFA Knight armor"
 		for(var/i in 1 to armor.storage_slots)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.wear_suit), WEAR_IN_JACKET)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.wear_suit), WEAR_IN_JACKET)
 
 	// Pouches
 	if(pouch_r_success)
 		var/obj/item/storage/pouch/explosive/pouch = H.r_store
 		pouch.name = "HEFA pouch"
 		for(var/i in 1 to pouch.storage_slots)
-			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.r_store), WEAR_IN_R_STORE)
+			H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.r_store), WEAR_IN_R_STORE)
 
 	// Webbing
 	for(var/i in 1 to W.hold.storage_slots)
-		H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/frag(H.back), WEAR_IN_ACCESSORY)
+		H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/frag(H.back), WEAR_IN_ACCESSORY)
 
 /datum/equipment_preset/fun/santa
 	name = "Fun - Santa"
@@ -454,7 +248,7 @@
 	. = ..()
 	access = get_all_accesses() + get_all_centcom_access()
 
-/datum/equipment_preset/fun/santa/load_name(mob/living/carbon/human/H, var/randomise)
+/datum/equipment_preset/fun/santa/load_name(mob/living/carbon/human/H, randomise)
 	H.gender = MALE
 	H.change_real_name(H, "Santa")
 
@@ -484,6 +278,7 @@
 	H.equip_to_slot_or_del(new /obj/item/storage/belt/gun/mateba/general/santa(H), WEAR_WAIST)
 
 	H.set_species("Human Hero") //Santa is STRONG.
+	ADD_TRAIT(H, TRAIT_SANTA, TRAIT_SOURCE_ADMIN)
 
 /datum/equipment_preset/upp/ivan
 	name = "Fun - Ivan"
@@ -493,7 +288,7 @@
 	rank = "UPP Armsmaster"
 	role_comm_title = null
 
-/datum/equipment_preset/upp/ivan/load_name(mob/living/carbon/human/H, var/randomise)
+/datum/equipment_preset/upp/ivan/load_name(mob/living/carbon/human/H, randomise)
 	H.gender = MALE
 	H.change_real_name(H, "Ivan")
 	H.f_style = "Shaved"
@@ -527,7 +322,7 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/ivanberet, WEAR_HEAD)
 	//limb
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/marine/upp, WEAR_FEET)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran/PMC, WEAR_HANDS)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran/pmc, WEAR_HANDS)
 	//waist
 	H.equip_to_slot_or_del(new /obj/item/storage/belt/gun/type47/ivan, WEAR_WAIST)
 	//belt filled with random magazines, it's cool
@@ -549,7 +344,7 @@
 	. = ..()
 	access = get_all_accesses()
 
-/datum/equipment_preset/fun/van_bandolier/load_name(mob/living/carbon/human/H, var/randomise)
+/datum/equipment_preset/fun/van_bandolier/load_name(mob/living/carbon/human/H, randomise)
 	H.gender = MALE
 	H.change_real_name(H, "Van Bandolier")
 	H.age = 55
@@ -593,7 +388,7 @@
 
 	//limbs
 	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran/insulated/van_bandolier(H), WEAR_HANDS)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/veteran/PMC/van_bandolier(H), WEAR_FEET)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/veteran/pmc/van_bandolier(H), WEAR_FEET)
 
 	//hands
 	H.equip_to_slot_or_del(new /obj/item/storage/box/twobore(H), WEAR_L_HAND)
@@ -625,13 +420,13 @@
 /datum/equipment_preset/fun/monkey/load_race(mob/living/carbon/human/H, client/mob_client)
 	H.set_species(SPECIES_MONKEY)
 
-/datum/equipment_preset/fun/monkey/load_name(mob/living/carbon/human/H, var/randomise, var/client/mob_client)
+/datum/equipment_preset/fun/monkey/load_name(mob/living/carbon/human/H, randomise, client/mob_client)
 	H.gender = pick(60;MALE,40;FEMALE)
 	var/random_name = get_random_name(H)
 	H.change_real_name(H, random_name)
 	H.age = rand(1, 40)
 
-/datum/equipment_preset/fun/monkey/proc/get_random_name(var/mob/living/carbon/human/H)
+/datum/equipment_preset/fun/monkey/proc/get_random_name(mob/living/carbon/human/H)
 	return pick(monkey_names)
 
 /datum/equipment_preset/fun/monkey/marine
@@ -649,7 +444,7 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/rifle/m41a(H), WEAR_BACK)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle(H), WEAR_IN_JACKET)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE(H), WEAR_IN_JACKET)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive(H), WEAR_IN_JACKET)
 
 /datum/equipment_preset/fun/monkey/soldier
 	name = "Fun - Monkey Soldier"
@@ -669,4 +464,4 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/rifle/type71/rifleman(H), WEAR_BACK)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/type71(H), WEAR_IN_JACKET)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/type71(H), WEAR_IN_JACKET)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/HE/upp(H), WEAR_IN_JACKET)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/high_explosive/upp(H), WEAR_IN_JACKET)
