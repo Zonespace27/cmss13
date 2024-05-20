@@ -190,7 +190,7 @@ GLOBAL_LIST_INIT(apc_wire_descriptions, list(
 			ui.open()
 
 /obj/structure/machinery/power/apc/ui_status(mob/user)
-	if(!opened && can_use(user, 1))
+	if(!opened && can_use(user, FALSE))
 		. = UI_INTERACTIVE
 
 /obj/structure/machinery/power/apc/ui_state(mob/user)
@@ -260,7 +260,7 @@ GLOBAL_LIST_INIT(apc_wire_descriptions, list(
 /obj/structure/machinery/power/apc/ui_act(action, params)
 	. = ..()
 
-	if(. || !can_use(usr, 1))
+	if(. || !can_use(usr, TRUE))
 		return
 	var/target_wire = params["wire"]
 	if(locked && !target_wire) //wire cutting etc does not require the apc to be unlocked
@@ -921,7 +921,7 @@ GLOBAL_LIST_INIT(apc_wire_descriptions, list(
 			SSclues.create_print(get_turf(user), user, "The fingerprint contains small parts of battery acid.")
 			SEND_SIGNAL(user, COMSIG_MOB_APC_REMOVE_CELL, src)
 		return
-	if(stat & (BROKEN|MAINT))
+	if((stat & (BROKEN|MAINT)) || !can_use(user, TRUE))
 		return
 
 	tgui_interact(user)
@@ -1000,51 +1000,51 @@ GLOBAL_LIST_INIT(apc_wire_descriptions, list(
 				SEND_SIGNAL(user, COMSIG_MOB_APC_POWER_PULSE, src)
 			addtimer(VARSET_CALLBACK(src, shorted, FALSE), 2 MINUTES)
 
-/obj/structure/machinery/power/apc/proc/can_use(mob/living/user as mob, loud = 0) //used by attack_hand() and Topic()
-	if(user.client && user.client.remote_control)
+/obj/structure/machinery/power/apc/proc/can_use(mob/living/user as mob, loud = FALSE) //used by attack_hand() and Topic()
+	if(user.client?.remote_control)
 		return TRUE
 
 	if(user.stat)
-		to_chat(user, SPAN_WARNING("You must be conscious to use [src]!"))
-		return 0
-	if(!user.client)
-		return 0
+		if(loud)
+			to_chat(user, SPAN_WARNING("You must be conscious to use [src]!"))
+		return FALSE
 	if(!(ishuman(user) || isRemoteControlling(user)))
-		to_chat(user, SPAN_WARNING("You don't have the dexterity to use [src]!"))
-		SSnano.nanomanager.close_user_uis(user, src)
-		return 0
+		if(loud)
+			to_chat(user, SPAN_WARNING("You don't have the dexterity to use [src]!"))
+		return FALSE
 	if(user.is_mob_restrained())
-		to_chat(user, SPAN_WARNING("You must have free hands to use [src]."))
-		return 0
+		if(loud)
+			to_chat(user, SPAN_WARNING("You must have free hands to use [src]."))
+		return FALSE
 	if(user.body_position == LYING_DOWN)
-		to_chat(user, SPAN_WARNING("You can't reach [src]!"))
-		return 0
+		if(loud)
+			to_chat(user, SPAN_WARNING("You can't reach [src]!"))
+		return FALSE
 	autoflag = 5
 	if(isRemoteControlling(user))
 		if(aidisabled)
-			if(!loud)
+			if(loud)
 				to_chat(user, SPAN_WARNING("[src] has AI control disabled!"))
-				SSnano.nanomanager.close_user_uis(user, src)
-			return 0
-	else
-		if((!in_range(src, user) || !istype(src.loc, /turf)))
-			SSnano.nanomanager.close_user_uis(user, src)
-			return 0
+			return FALSE
+	else if(!in_range(src, user) || !isturf(src.loc))
+		return FALSE
 
-	var/mob/living/carbon/human/H = user
-	if(istype(H))
-		if(H.getBrainLoss() >= 60)
-			for(var/mob/M as anything in viewers(src, null))
-				H.visible_message(SPAN_WARNING("[H] stares cluelessly at [src] and drools."),
+	var/mob/living/carbon/human/human_user = user
+	if(istype(human_user))
+		if(human_user.getBrainLoss() >= 60)
+			if(loud)
+				human_user.visible_message(SPAN_WARNING("[human_user] stares cluelessly at [src] and drools."),
 				SPAN_WARNING("You stare cluelessly at [src] and drool."))
-			return 0
-		else if(prob(H.getBrainLoss()))
-			to_chat(user, SPAN_WARNING("You momentarily forget how to use [src]."))
-			return 0
-		if(!skillcheck(H, SKILL_ENGINEER, SKILL_ENGINEER_ENGI))
-			to_chat(H, SPAN_WARNING("You don't know how to use \the [src]'s interface."))
-			return
-	return 1
+			return FALSE
+		else if(prob(human_user.getBrainLoss()))
+			if(loud)
+				to_chat(user, SPAN_WARNING("You momentarily forget how to use [src]."))
+			return FALSE
+		if(!skillcheck(human_user, SKILL_ENGINEER, SKILL_ENGINEER_ENGI))
+			if(loud)
+				to_chat(human_user, SPAN_WARNING("You don't know how to use [src]'s interface."))
+			return FALSE
+	return TRUE
 
 /obj/structure/machinery/power/apc/proc/ion_act()
 	//intended to be a bit like an emag
