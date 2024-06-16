@@ -374,7 +374,7 @@ GLOBAL_LIST_INIT(reboot_sfx, file2list("config/reboot_sfx.txt"))
 
 /world/proc/init_coverage()
 #ifdef CODE_COVERAGE
-	AUXTOOLS_CHECK_NO_CONFIG(AUXLUA)
+	AUXTOOLS_CHECK_NO_CONFIG(world.GetConfig("env", "AUXTOOLS_DEBUG_DLL"))
 	start_code_coverage("code_coverage.xml")
 #else
 	return
