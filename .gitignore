@@ -34,3 +34,6 @@ libprof.so
 
 # OpenDream compatibility stuff
 colonialmarines.json
+
+# From auxtools code coverage
+code_coverage.xml

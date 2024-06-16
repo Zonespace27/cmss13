@@ -23,6 +23,8 @@ GLOBAL_LIST_INIT(reboot_sfx, file2list("config/reboot_sfx.txt"))
 	prof_init()
 #endif
 
+	init_coverage()
+
 	GLOB.config_error_log = GLOB.world_attack_log = GLOB.world_href_log = GLOB.world_attack_log = "data/logs/config_error.[GUID()].log"
 
 	config.Load(params[OVERRIDE_CONFIG_DIRECTORY_PARAMETER])
@@ -369,6 +371,14 @@ GLOBAL_LIST_INIT(reboot_sfx, file2list("config/reboot_sfx.txt"))
 	var/init = call_ext(lib, "init")()
 	if("0" != init)
 		CRASH("[lib] init error: [init]")
+
+/world/proc/init_coverage()
+#ifdef CODE_COVERAGE
+	AUXTOOLS_CHECK_NO_CONFIG(AUXLUA)
+	start_code_coverage("code_coverage.xml")
+#else
+	return
+#endif
 
 /world/proc/HandleTestRun()
 	// Wait for the game ticker to initialize

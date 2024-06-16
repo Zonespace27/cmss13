@@ -43,3 +43,7 @@ jobs:
         run: |
           source $HOME/BYOND/byond/bin/byondsetup
           bash tools/ci/run_server.sh ${{ inputs.map }}
+      - name: Upload Code Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ci_test/code_coverage.xml

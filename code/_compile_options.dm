@@ -7,15 +7,20 @@
 // byond-tracy is not shipped with CM code. Build it yourself here: https://github.com/mafemergency/byond-tracy/
 //#define BYOND_TRACY
 
+// If this is uncommented, we will use auxtools to generate cobertura XML files (under /coverage) that can be shunted to a CI service like https://codecov.io
+// Note, this requires using CBT to build in flat file mode
+// #define CODE_COVERAGE
+
 #ifdef CIBUILDING
 #define UNIT_TESTS
+#define CODE_COVERAGE
 #endif
 
 #ifdef CITESTING
 #define TESTING
 #endif
 
-#if defined(UNIT_TESTS)
+#ifdef UNIT_TESTS
 //Hard del testing defines
 #define REFERENCE_TRACKING
 #define REFERENCE_TRACKING_DEBUG
@@ -36,7 +41,7 @@
 #warn Consider switching to VSCode editor instead, where you can press Ctrl+Shift+B to build.
 #endif
 
-//#define UNIT_TESTS //If this is uncommented, we do a single run though of the game setup and tear down process with unit tests in between
+#define UNIT_TESTS //If this is uncommented, we do a single run though of the game setup and tear down process with unit tests in between
 
 // #define TESTING
 // #define REFERENCE_TRACKING
