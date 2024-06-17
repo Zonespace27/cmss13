@@ -27,6 +27,6 @@
 				"-trusted"
 			],
 			"preLaunchTask": "Build All"
-		},
+		}
     ]
 }
