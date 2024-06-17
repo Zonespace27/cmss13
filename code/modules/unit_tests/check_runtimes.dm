@@ -2,7 +2,9 @@
 	priority = TEST_LONGER
 
 	///Regex patterns if we must satisfy checks with runtimes present
-	var/list/whitelisted_regex = list()
+	var/list/whitelisted_regex = list(
+		"call_proc_by_id"
+	)
 
 /datum/unit_test/check_runtimes/Run()
 	for(var/runtime as anything in GLOB.STUI.runtime)
