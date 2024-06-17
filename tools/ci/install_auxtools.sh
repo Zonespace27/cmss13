@@ -13,7 +13,7 @@ echo "1111"
 echo "2222"
 curl "https://github.com/$AUXTOOLS_REPO/archive/refs/tags/v$AUXTOOLS_VERSION.tar.gz" -o libauxtools.tar.gz
 echo "2233"
-tar -xzf ./libauxtools.tar.gz
+tar -xf ./libauxtools.tar.gz
 rm libauxtools.tar.gz
 cd libauxtools
 rustup -y target add i686-unknown-linux-gnu
