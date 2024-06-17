@@ -11,10 +11,10 @@ chmod +x rustup-init.sh
 echo "1111"
 ./rustup-init.sh -y
 echo "2222"
-curl "https://github.com/$AUXTOOLS_REPO/archive/refs/tags/v$AUXTOOLS_VERSION.tar.gz" -o libauxtools.tar.gz
-echo "2233"
-tar -xf ./libauxtools.tar.gz
-rm libauxtools.tar.gz
+#curl "https://github.com/$AUXTOOLS_REPO/archive/refs/tags/v$AUXTOOLS_VERSION.zip" -o libauxtools.zip
+curl "https://github.com/willox/auxtools/archive/refs/heads/master.zip" -o libauxtools.zip
+unzip libauxtools.zip
+rm libauxtools.zip
 cd libauxtools
 rustup -y target add i686-unknown-linux-gnu
 echo "3333"
