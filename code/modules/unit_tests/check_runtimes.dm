@@ -8,6 +8,7 @@
 
 /datum/unit_test/check_runtimes/Run()
 	for(var/runtime as anything in GLOB.STUI.runtime)
+		TEST_NOTICE(runtime)
 		if(!is_whitelisted(runtime))
 			TEST_FAIL(runtime)
 
