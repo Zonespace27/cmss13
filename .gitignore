@@ -37,3 +37,8 @@ colonialmarines.json
 
 # From auxtools code coverage
 code_coverage.xml
+
+# Built auxtools libraries and intermediate files
+#aux*.dll
+#libaux*.so
+#aux*.pdb
