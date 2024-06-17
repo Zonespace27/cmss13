@@ -55,7 +55,7 @@ GLOBAL_PROTECT(auxtools_initialized)
 	CRASH("auxcov not loaded")
 
 /world/Del()
-	AUXTOOLS_FULL_SHUTDOWN(AUXLUA)
+	AUXTOOLS_FULL_SHUTDOWN(AUXTOOLS)
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if (debug_server)
 		LIBCALL(debug_server, "auxtools_shutdown")()

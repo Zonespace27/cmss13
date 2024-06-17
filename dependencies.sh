@@ -25,3 +25,6 @@ export AUXLUA_REPO=tgstation/auxlua
 
 #auxlua git tag
 export AUXLUA_VERSION=1.4.4
+
+export AUXTOOLS_REPO=willox/auxtools
+export AUXTOOLS_VERSION=2.3.3
