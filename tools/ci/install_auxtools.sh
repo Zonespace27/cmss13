@@ -8,12 +8,15 @@ mkdir -p ~/.byond/bin
 sudo apt-get install gcc-multilib
 curl https://sh.rustup.rs -sSfo rustup-init.sh
 chmod +x rustup-init.sh
-./rustup-init.sh
+echo "1111"
+./rustup-init.sh -y
+echo "2222"
 curl "https://github.com/$AUXTOOLS_REPO/archive/refs/tags/v$AUXTOOLS_VERSION.zip" -o libauxtools.zip
 unzip libauxtools.zip
 rm libauxtools.zip
 cd libauxtools
 rustup -y target add i686-unknown-linux-gnu
+echo "3333"
 sudo dpkg --add-architecture i386
 sudo apt-get update
 sudo apt-get install build-essential g++-multilib libc6-i386 libstdc++6:i386
