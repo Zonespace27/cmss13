@@ -29,9 +29,9 @@ jobs:
           sudo apt update || true
           sudo apt install -o APT::Immediate-Configure=false zlib1g-dev:i386 libssl-dev:i386
           bash tools/ci/install_rust_g.sh
-      - name: Install auxtools
+      - name: Install auxlua
         run: |
-          bash tools/ci/install_auxtools.sh
+          bash tools/ci/install_auxlua.sh
       - name: Configure version
         run: |
           echo "BYOND_MAJOR=${{ inputs.major }}" >> $GITHUB_ENV
