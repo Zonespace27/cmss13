@@ -157,6 +157,12 @@
 
 			M.animation_attack_on(src)
 
+			if(prob(slash_evasion))
+				playsound(M.loc, 'sound/weapons/alien_claw_swipe.ogg', 25, 1)
+				M.visible_message(SPAN_DANGER("\The [src] dodges out of [M] reach!"),
+				SPAN_DANGER("You try to hit [src], but it dodges out of the way!"), null, 5, CHAT_TYPE_XENO_COMBAT)
+				return XENO_ATTACK_ACTION
+
 			// copypasted from attack_alien.dm
 			//From this point, we are certain a full attack will go out. Calculate damage and modifiers
 			M.track_slashes(M.caste_type) //Adds to slash stat.
