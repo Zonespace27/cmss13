@@ -61,7 +61,7 @@
 
 /datum/moba_caste/runner/proc/additional_slash(mob/living/carbon/xenomorph/attacked_xeno)
 	attacked_xeno.attack_alien(tied_xeno)
-	tied_xeno.next_move -= 0.3 SECONDS // redeeming cd for additional slash
+	tied_xeno.next_move -= 0.3 SECONDS // redeeming cd from additional slash
 	reset_count()
 
 /datum/moba_caste/runner/proc/reset_count()
@@ -143,7 +143,7 @@
 
 /datum/action/xeno_action/activable/pounce/runner/moba/proc/additional_slash(mob/living/carbon/target, mob/living/carbon/xenomorph/xeno)
 	target.attack_alien(xeno)
-	xeno.next_move -= 0.3 SECONDS // redeeming cd for additional slash
+	xeno.next_move -= 0.3 SECONDS // redeeming cd from additional slash
 
 /datum/action/xeno_action/activable/pounce/runner/moba/level_up_ability(new_level)
 	xeno_cooldown = src::xeno_cooldown - ((new_level - 1) * (2 SECONDS))
