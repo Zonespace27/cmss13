@@ -1,7 +1,7 @@
 //SLOWED
 /datum/status_effect/slow
 	id = "slow"
-	status_type = STATUS_EFFECT_REPLACE
+	status_type = STATUS_EFFECT_MULTIPLE
 	alert_type = null
 	var/speed_debuff
 

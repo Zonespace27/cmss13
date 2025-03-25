@@ -30,45 +30,12 @@
 		/datum/action/xeno_action/onclick/moba_kick_dirt,
 		/datum/action/xeno_action/onclick/in_the_zone,
 	)
-	var/mob/living/carbon/xenomorph/tied_xeno
-	var/hit_count = 0
-	var/rapid_claws_threshold = 3
 
 /datum/moba_caste/runner/apply_caste(mob/living/carbon/xenomorph/xeno, datum/component/moba_player/player_component, datum/moba_player/player_datum)
 	. = ..()
-	RegisterSignal(xeno, COMSIG_XENO_ALIEN_ATTACK, PROC_REF(rapid_claws))
-	tied_xeno = xeno
+	xeno.apply_status_effect(/datum/status_effect/stacking/rapid_claws)
 
-/datum/moba_caste/runner/proc/rapid_claws(datum/source, mob/living/carbon/xenomorph/attacked_xeno)
-	SIGNAL_HANDLER
-
-	if(tied_xeno.hive.is_ally(attacked_xeno))
-		return // in case friendly-fire with slashes is somehow possible
-
-	addtimer(CALLBACK(src, PROC_REF(reset_count)), 4 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE) // each time we have 4 seconds to count next slash as "consecutive"
-	hit_count++
-
-	if(tied_xeno.hud_used?.locate_leader)
-		tied_xeno.hud_used.locate_leader.maptext = "<span class='maptext' style='color: red'>Slashes: <b>[hit_count]</b>/<b>[rapid_claws_threshold]</b></span>"
-		tied_xeno.hud_used.locate_leader.maptext_width = 128
-		tied_xeno.hud_used.locate_leader.maptext_x = -48
-		tied_xeno.hud_used.locate_leader.maptext_y = 192
-
-	if(hit_count >= rapid_claws_threshold)
-		playsound(tied_xeno.loc, "alien_roar", 50, FALSE)
-		addtimer(CALLBACK(src, PROC_REF(additional_slash), attacked_xeno), 0.3 SECONDS)
-		reset_count()
-
-/datum/moba_caste/runner/proc/additional_slash(mob/living/carbon/xenomorph/attacked_xeno)
-	attacked_xeno.attack_alien(tied_xeno)
-	tied_xeno.next_move -= 0.3 SECONDS // redeeming cd from additional slash
-	reset_count()
-
-/datum/moba_caste/runner/proc/reset_count()
-	hit_count = 0
-	if(tied_xeno.hud_used?.locate_leader)
-		tied_xeno.hud_used.locate_leader.maptext = "<span class='maptext' style='color: red'>Slashes: <b>[hit_count]</b>/<b>[rapid_claws_threshold]</b></span>"
-
+// [Insert bone joke here]
 /datum/action/xeno_action/activable/runner_skillshot/moba
 	desc = "Launch bone spurs at a target. On hit, deals 40/52.5/65 (+35% AD) physical damage and slows the target by 40/60/75% for 1/1.5/2 seconds. Cooldown 12/10/8 seconds. Plasma cost of 70."
 	ability_primacy = XENO_PRIMARY_ACTION_1
@@ -114,6 +81,7 @@
 	duration = 2 SECONDS
 	slow = 0.7
 
+// Basic bitch pounce - now with some free slashes!
 /datum/action/xeno_action/activable/pounce/runner/moba
 	desc = "Lunge towards a tile or target within 6 tiles. If you hit an enemy, you automatically make two attacks against them while slowing them by 30/50/70% for 1 second. Cooldown 19/17/15 seconds. Plasma cost of 70."
 	ability_primacy = XENO_PRIMARY_ACTION_2
@@ -151,6 +119,7 @@
 
 	desc = "Lunge towards a tile or target within 6 tiles. If you hit an enemy, you automatically make two attacks against them while slowing them by [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 30, 50, 70)]% for 1 second. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 19, 17, 15)] seconds. Plasma cost of 70."
 
+// Send sand in the end
 /datum/action/xeno_action/onclick/moba_kick_dirt
 	name = "Kick Dirt"
 	desc = "Kick dirt up in an area behind you. All enemies within the region have their vision blurred and their speed reduced by 10/15/20% for 2/3/4 seconds. Cooldown 22/20/18 seconds. Plasma cost of 90."
@@ -185,7 +154,7 @@
 			if(LinkBlocked(xeno, get_turf(xeno), target, list(target)))
 				continue
 			target.apply_status_effect(/datum/status_effect/slow, target.cur_speed * slow, duration)
-			target.AdjustEyeBlur(25)
+			target.EyeBlur(25)
 			addtimer(CALLBACK(target, TYPE_PROC_REF(/mob/living, ReduceEyeBlur), 25), duration)
 
 	playsound(get_turf(xeno), 'sound/effects/bamf.ogg', 50, TRUE)
@@ -219,6 +188,7 @@
 	icon_state = "xeno_telegraph_lash_anim"
 	layer = BELOW_MOB_LAYER
 
+// Nyooom vrrrrrrmmmmm
 /datum/action/xeno_action/onclick/in_the_zone
 	name = "In The Zone"
 	desc = "For 6/8/10 seconds, gain a -0.5 speed bonus and ignore 15/25/35% of all attacks targeted at you. Cooldown 120/105/90 seconds. Plasma cost of 100."
@@ -248,4 +218,4 @@
 	evasion = src::evasion + ((new_level - 1) * 0.1)
 	duration = src::duration + ((new_level - 1) * 2)
 
-	desc = "For 6/8/10 seconds, gain a -0.5 speed bonus and ignore [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 15, 25, 35)]% of all attacks targeted at you. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 120, 105, 90)] seconds. Plasma cost of 100."
+	desc = "For [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 6, 8, 10)] seconds, gain a -0.5 speed bonus and ignore [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 15, 25, 35)]% of all attacks targeted at you. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 120, 105, 90)] seconds. Plasma cost of 100."
