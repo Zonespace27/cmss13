@@ -5,7 +5,6 @@
 	icon = 'icons/obj/structures/alien/structures96x96.dmi'
 	can_block_movement = TRUE
 	density = TRUE
-	pixel_x = -32
 	maptext_x = 16
 	maptext_y = 98
 	bound_height = 96
@@ -48,6 +47,8 @@
 		playsound(loc, "alien_resin_break", 25)
 
 		health -= M.melee_damage_upper
+		if(HAS_TRAIT(M, TRAIT_MOBA_STRUCTURESHRED))
+			health -= MOBA_HIVEBOT_BOON_TRUE_DAMAGE
 		healthcheck()
 		return XENO_ATTACK_ACTION
 

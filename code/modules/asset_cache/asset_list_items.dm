@@ -50,6 +50,12 @@
 	if(!send_only_temp)
 		SSassets.transport.send_assets(client, common)
 
+/datum/asset/directory/get_url_mappings()
+	. = ..()
+
+	for (var/asset_name in common)
+		.[asset_name] = SSassets.transport.get_asset_url(asset_name)
+
 /datum/asset/directory/nanoui
 	common_dirs = list(
 		"nano/css/",
@@ -423,10 +429,29 @@
 	name = "mobaitems"
 
 /datum/asset/spritesheet/moba_items/register()
-	for(var/icon_state in icon_states('icons/misc/moba/item_icons.dmi'))
-		var/icon/icon_sprite = icon('icons/misc/moba/item_icons.dmi', icon_state)
+	var/icon/t1_icon = icon('icons/misc/moba/item_icons.dmi', "t1")
+	var/icon/t2_icon = icon('icons/misc/moba/item_icons.dmi', "t2")
+	var/icon/t3_icon = icon('icons/misc/moba/item_icons.dmi', "t3")
+	var/list/used_iconstates = list()
+	for(var/datum/moba_item/item as anything in subtypesof(/datum/moba_item))
+		if(!item::icon_state || (item::icon_state in used_iconstates))
+			continue
+
+		var/icon/icon_sprite = icon('icons/misc/moba/item_icons.dmi', item::icon_state)
+		if(!icon_sprite)
+			continue
+
+		switch(item::tier)
+			if(1)
+				icon_sprite.Blend(t1_icon, ICON_OVERLAY)
+			if(2)
+				icon_sprite.Blend(t2_icon, ICON_OVERLAY)
+			if(3)
+				icon_sprite.Blend(t3_icon, ICON_OVERLAY)
+
 		icon_sprite.Scale(45, 45)
-		Insert(icon_state, icon_sprite)
+		Insert(item::icon_state, icon_sprite)
+		used_iconstates += item::icon_state
 
 	return ..()
 
@@ -492,4 +517,9 @@
 /datum/asset/simple/vv
 	assets = list(
 		"view_variables.css" = 'html/admin/view_variables.css'
+	)
+
+/datum/asset/directory/book_assets
+	common_dirs = list(
+		"html/book_assets/",
 	)

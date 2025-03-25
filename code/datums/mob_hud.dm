@@ -19,6 +19,7 @@ GLOBAL_LIST_INIT_TYPED(huds, /datum/mob_hud, list(
 	MOB_HUD_FACTION_PMC = new /datum/mob_hud/faction/pmc(),
 	MOB_HUD_FACTION_CMB = new /datum/mob_hud/faction/cmb(),
 	MOB_HUD_FACTION_NSPA = new /datum/mob_hud/faction/nspa(),
+	MOB_HUD_FACTION_WO = new /datum/mob_hud/faction/wo(),
 	MOB_HUD_HUNTER = new /datum/mob_hud/hunter_hud(),
 	MOB_HUD_HUNTER_CLAN = new /datum/mob_hud/hunter_clan(),
 	MOB_HUD_EXECUTE = new /datum/mob_hud/execute_hud(),
@@ -218,6 +219,9 @@ GLOBAL_LIST_INIT_TYPED(huds, /datum/mob_hud, list(
 /datum/mob_hud/faction/pmc
 	faction_to_check = FACTION_PMC
 
+/datum/mob_hud/faction/wo
+	faction_to_check = FACTION_WY_DEATHSQUAD
+
 /datum/mob_hud/faction/nspa
 	faction_to_check = FACTION_NSPA
 
@@ -310,6 +314,9 @@ GLOBAL_LIST_INIT_TYPED(huds, /datum/mob_hud, list(
 		CRASH("hud_list lacks HEALTH_HUD_XENO despite not being deleted in med_hud_set_health()")
 
 	var/image/holder = hud_list[HEALTH_HUD_XENO]
+	if(HAS_TRAIT_FROM(src, TRAIT_CLOAKED, "bush")) // zonenote unhackify this shit later
+		holder.icon_state = ""
+		return
 
 	var/health_hud_type = "xenohealth"
 	if(stat == DEAD)
@@ -349,7 +356,8 @@ GLOBAL_LIST_INIT_TYPED(huds, /datum/mob_hud, list(
 		holder.icon_state = "xenoarmor0"
 	else
 		var/amount = round(armor_integrity*100/armor_integrity_max, 10)
-		if(!amount) amount = 1 //don't want the 'zero health' icon when we still have 4% of our health
+		if(!amount)
+			amount = 1 //don't want the 'zero health' icon when we still have 4% of our health
 		holder.icon_state = "xenoarmor[amount]"
 
 /mob/living/carbon/human/med_hud_set_health()
@@ -526,6 +534,9 @@ GLOBAL_LIST_INIT_TYPED(huds, /datum/mob_hud, list(
 
 /mob/living/carbon/xenomorph/proc/hud_set_plasma()
 	var/image/holder = hud_list[PLASMA_HUD]
+	if(HAS_TRAIT_FROM(src, TRAIT_CLOAKED, "bush")) // zonenote unhackify this shit later
+		holder.icon_state = ""
+		return
 	if(stat == DEAD || plasma_max == 0)
 		holder.icon_state = "plasma0"
 	else
@@ -614,7 +625,7 @@ GLOBAL_LIST_INIT_TYPED(huds, /datum/mob_hud, list(
 	if (age)
 		var/image/J = image('icons/mob/hud/hud.dmi',src, "hudxenoupgrade[age]")
 		holder.overlays += J
-	if(hive && hivenumber != XENO_HIVE_NORMAL)
+	if(hive && hivenumber != XENO_HIVE_NORMAL && !HAS_TRAIT(src, TRAIT_MOBA_PARTICIPANT))
 		var/image/J = image('icons/mob/hud/hud.dmi', src, "hudalien_xeno")
 		J.color = hive.color
 		holder.overlays += J

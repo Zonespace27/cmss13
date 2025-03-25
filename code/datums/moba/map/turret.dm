@@ -105,7 +105,7 @@
 	var/mob/living/last_hit = last_fired_target?.resolve()
 	var/highest_priority = 0
 	var/mob/living/to_target
-	for(var/mob/living/possible_target in urange(range, get_turf(src)))
+	for(var/mob/living/possible_target in long_orange(range, get_turf(src)))
 		var/priority = get_target_priority(possible_target, last_hit)
 		if(priority > highest_priority)
 			highest_priority = priority
@@ -164,6 +164,8 @@
 		playsound(loc, "alien_resin_break", 25)
 
 		health -= M.melee_damage_upper
+		if(HAS_TRAIT(M, TRAIT_MOBA_STRUCTURESHRED))
+			health -= MOBA_HIVEBOT_BOON_TRUE_DAMAGE
 		healthcheck()
 		return XENO_ATTACK_ACTION
 

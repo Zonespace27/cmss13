@@ -1,12 +1,12 @@
-//#define MOBA_TESTING
-#define MOBA_MP_TESTING
+#define MOBA_TESTING
+//#define MOBA_MP_TESTING
 
 #define MOBA_GOLD_NAME "Gold"
 #define MOBA_GOLD_NAME_SHORT "G"
 
-#define MOBA_LANE_TOP "Top"
-#define MOBA_LANE_BOT "Bottom"
-#define MOBA_LANE_JUNGLE "Jungler"
+#define MOBA_LANE_TOP "Top Lane"
+#define MOBA_LANE_BOT "Bottom Lane"
+#define MOBA_LANE_JUNGLE "Jungle"
 #define MOBA_LANE_SUPPORT "Support"
 
 #define MOBA_ARCHETYPE_ASSASSIN "Assassin"
@@ -44,3 +44,12 @@
 #define MOBA_LEVEL_DIFF_XP_MOD 0.2
 
 #define MOBA_ITEM_SELLBACK_VALUE 0.6
+
+/// How much bonus damage to deal against structures minions/players have the hivebot boon
+#define MOBA_HIVEBOT_BOON_TRUE_DAMAGE 8
+
+/// Bonus AD from carp boon
+#define MOBA_CARP_BOON_AD_MULT 1.08
+
+/// Bonus AP from carp boon
+#define MOBA_CARP_BOON_AP_MULT 1.1

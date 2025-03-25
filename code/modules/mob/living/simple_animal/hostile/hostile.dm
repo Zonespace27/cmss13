@@ -91,8 +91,11 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
+	if(QDELETED(src))
+		return
+
 	var/mob/living/target_mob = target_mob_ref?.resolve()
-	if(!Adjacent(target_mob))
+	if(!Adjacent(target_mob) || QDELETED(target_mob))
 		return
 	if(isliving(target_mob))
 		target_mob.attack_animal(src)
@@ -120,7 +123,8 @@
 
 /mob/living/simple_animal/hostile/death(datum/cause_data/cause_data, gibbed = 0, deathmessage = "seizes up and falls limp...")
 	. = ..()
-	if(!.) return //was already dead
+	if(!.)
+		return //was already dead
 	walk(src, 0)
 
 /mob/living/simple_animal/hostile/Life(delta_time)

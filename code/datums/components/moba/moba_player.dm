@@ -11,6 +11,11 @@
 		/datum/status_effect/acid_neutralized = "Acid Neutralized",
 		/datum/status_effect/stacking/furious_haste = "Furious Haste",
 		/datum/status_effect/stacking/rended_armor = "Rended Armor",
+		/datum/status_effect/antiheal = "Healing Disrupted",
+		/datum/status_effect/stacking/bleed = "Bleeding",
+		/datum/status_effect/acid_soaked = "Acid Soaked",
+		/datum/status_effect/stacking/spit_detonation = "Acid Detonation",
+		/datum/status_effect/corroding = "Corroding",
 	)
 
 	var/static/list/level_up_thresholds = list(
@@ -44,6 +49,9 @@
 	var/lifesteal = 0
 	var/slash_penetration = 0
 	var/acid_penetration = 0
+	var/ap_multiplier = 1
+	/// Applies to both armor and acid armor
+	var/armor_multiplier = 1
 
 /datum/component/moba_player/Initialize(datum/moba_player/player, id, right)
 	. = ..()
@@ -133,6 +141,7 @@
 	RegisterSignal(parent_xeno, COMSIG_XENO_TRY_OVERWATCH, PROC_REF(on_overwatch))
 	RegisterSignal(parent_xeno, COMSIG_MOB_LOGGED_IN, PROC_REF(on_reconnect))
 	RegisterSignal(parent_xeno, COMSIG_MOBA_GET_PLAYER_DATUM, PROC_REF(get_player_datum))
+	RegisterSignal(parent_xeno, COMSIG_XENO_PRE_APPLY_ARMOURED_DAMAGE, PROC_REF(on_armor_damage_apply))
 
 /datum/component/moba_player/proc/handle_level_up()
 	player_datum.level_up()
@@ -176,12 +185,12 @@
 	var/text_to_use = ""
 
 	for(var/datum/status_effect/effect as anything in parent_xeno.status_effects)
-		if(moba_status_effect_dict[effect])
+		if(moba_status_effect_dict[effect.type])
 			if(istype(effect, /datum/status_effect/stacking))
 				var/datum/status_effect/stacking/stack_effect = effect
-				text_to_use += "[moba_status_effect_dict[effect]] <b>[stack_effect.stacks]</b>x<br>"
+				text_to_use += "[moba_status_effect_dict[effect.type]] <b>[stack_effect.stacks]</b>x<br>"
 			else
-				text_to_use += "[moba_status_effect_dict[effect]]<br>"
+				text_to_use += "[moba_status_effect_dict[effect.type]]<br>"
 
 	parent_xeno.hud_used.alien_plasma_display.maptext = MAPTEXT(text_to_use)
 
@@ -190,7 +199,7 @@
 
 	parent_xeno = null
 	player_caste = null
-	QDEL_NULL(player_datum)
+	player_datum = null
 
 /// If the bullet is acidic, we don't use the value gotten from armor and instead use the acid_armor value
 /datum/component/moba_player/proc/on_bullet_act(mob/living/carbon/xenomorph/acting_xeno, list/damage_result, pre_mitigation_damage, ammo_flags, obj/projectile/acting_projectile)
@@ -279,13 +288,24 @@
 /datum/component/moba_player/proc/get_ap_signal(datum/source, list/ap_list)
 	SIGNAL_HANDLER
 
-	ap_list += acid_power
-
-/datum/component/moba_player/proc/get_ap()
+	var/ap = acid_power
 	var/datum/status_effect/acid_neutralized/neutralized = parent_xeno.has_status_effect(/datum/status_effect/acid_neutralized)
 	if(neutralized)
-		return acid_power * neutralized.ap_mult
-	return acid_power
+		ap *= neutralized.ap_mult
+
+	ap *= ap_multiplier
+
+	ap_list += ap
+
+/datum/component/moba_player/proc/get_ap()
+	var/ap = acid_power
+	var/datum/status_effect/acid_neutralized/neutralized = parent_xeno.has_status_effect(/datum/status_effect/acid_neutralized)
+	if(neutralized)
+		ap *= neutralized.ap_mult
+
+	ap *= ap_multiplier
+
+	return ap
 
 /datum/component/moba_player/proc/add_ap(ap)
 	acid_power += ap
@@ -485,3 +505,8 @@
 		MP.grant_gold(null, 10000)
 
 #endif
+
+/datum/component/moba_player/proc/on_armor_damage_apply(datum/source, list/damagedata)
+	SIGNAL_HANDLER
+
+	damagedata["armor"] *= armor_multiplier

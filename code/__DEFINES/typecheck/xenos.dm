@@ -27,7 +27,7 @@
 #define isxeno_builder(A) (isdrone(A) || ishivelord(A) || iscarrier(A) || isburrower(A) || isqueen(A))
 
 /// Returns true/false based on if the xenomorph can harm the passed carbon mob.
-/mob/living/carbon/xenomorph/proc/can_not_harm(mob/living/carbon/attempt_harm_mob)
+/mob/living/carbon/xenomorph/proc/can_not_harm(mob/living/attempt_harm_mob)
 	if(!istype(attempt_harm_mob))
 		return FALSE
 
@@ -40,6 +40,9 @@
 	if(hivenumber == XENO_HIVE_RENEGADE)
 		var/datum/hive_status/corrupted/renegade/renegade_hive = hive
 		return renegade_hive.iff_protection_check(src, attempt_harm_mob)
+
+	if(HAS_TRAIT(attempt_harm_mob, TRAIT_HAULED))
+		return TRUE
 
 	return hive.is_ally(attempt_harm_mob)
 
