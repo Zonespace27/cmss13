@@ -297,6 +297,7 @@
 	icon_state = "digital_clock"
 	force = 3
 	throwforce = 2
+	throw_speed = 1
 	throw_range = 4
 	w_class = SIZE_SMALL
 
