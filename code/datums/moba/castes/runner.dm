@@ -149,8 +149,9 @@
 		return
 
 	var/mob/living/carbon/xenomorph/xeno = owner
-	var/list/cone = cone(get_turf(xeno), distance, reverse_direction(xeno.dir))
+	xeno.animation_attack_on(get_step(get_turf(xeno), reverse_direction(xeno.dir)))
 
+	var/list/cone = cone(get_turf(xeno), distance, reverse_direction(xeno.dir))
 	for(var/turf/turf as anything in cone)
 		if(turf.density)
 			continue
