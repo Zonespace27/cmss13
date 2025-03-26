@@ -224,7 +224,7 @@
 	var/list/bonus_hp_list = list()
 	SEND_SIGNAL(xeno, COMSIG_MOBA_GET_BONUS_HP, bonus_hp_list)
 
-	var/shield_amount = (damage_accumulated * shield_mod) * (bonus_hp_list[1] * 0.01)
+	var/shield_amount = (damage_accumulated * shield_mod) + (bonus_hp_list[1] * 0.01)
 	xeno.add_xeno_shield(shield_amount, XENO_SHIELD_SOURCE_CUMULATIVE_GENERIC, duration = shield_duration, decay_amount_per_second = shield_amount/4, add_shield_on = TRUE, max_shield = INFINITY) // >:3
 
 	xeno.ability_speed_modifier -= slow
