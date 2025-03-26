@@ -168,12 +168,84 @@
 
 	desc = "Knock back all enemies around you by 1 tile, slowing them by [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "20", "25", "30")]% for 1.5 seconds. Additionally, if an enemy would collide with a solid object (wall, minion, tower, etc.), they are stunned for the same duration. Cooldown of [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "10", "9", "8")] seconds. Plasma cost [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "50", "45", "40")]."
 
+// "I am fucking invincible" - some bald guy
+/datum/action/xeno_action/onclick/moba_soak
+	name = "Soak"
+	desc = "Take 50% reduced damage from all sources for 3 seconds. During this time, you are unable to attack and have your speed reduced by 0.2. Once the time ends, you gain 175/200/225% (+1% bHP) of the damage taken as shields. These shields decay after 4/5/6 seconds. Cooldown of 16/15/14 seconds. Plasma cost 100."
+	action_icon_state = "soak"
+	macro_path = /datum/action/xeno_action/verb/verb_soak
+	action_type = XENO_ACTION_ACTIVATE
+	ability_primacy = XENO_PRIMARY_ACTION_3
+	plasma_cost = 100
+	xeno_cooldown = 16 SECONDS
+
+	var/slow = 0.2
+	var/shield_mod = 1.75
+	var/shield_duration = 4 SECONDS
+	var/incoming_damage_mod = 0.5
+	var/damage_accumulated = 0
+
+/datum/action/xeno_action/onclick/moba_soak/use_ability(atom/A)
+	var/mob/living/carbon/xenomorph/xeno = owner
+
+	if (!action_cooldown_check())
+		return
+
+	if (!xeno.check_state())
+		return
+
+	if(!check_and_use_plasma_owner())
+		return
+
+	RegisterSignal(xeno, COMSIG_XENO_TAKE_DAMAGE, PROC_REF(damage_accumulate))
+	addtimer(CALLBACK(src, PROC_REF(stop_accumulating)), 3 SECONDS)
+
+	xeno.balloon_alert(xeno, "begins to tank incoming damage!")
+	to_chat(xeno, SPAN_XENONOTICE("We begin to tank incoming damage!"))
+
+	xeno.add_filter("steelcrest_enraging", 1, list("type" = "outline", "color" = "#421313", "size" = 1))
+	playsound(get_turf(xeno), 'sound/effects/stonedoor_openclose.ogg', 30, 1)
+
+	xeno.ability_speed_modifier += slow
+
+	apply_cooldown()
+	return ..()
+
+/datum/action/xeno_action/onclick/moba_soak/proc/damage_accumulate(owner, damage_data, damage_type)
+	SIGNAL_HANDLER
+
+	damage_data["damage"] *= incoming_damage_mod
+	damage_accumulated += damage_data["damage"]
+
+/datum/action/xeno_action/onclick/moba_soak/proc/stop_accumulating()
+	var/mob/living/carbon/xenomorph/xeno = owner
+	UnregisterSignal(xeno, COMSIG_XENO_TAKE_DAMAGE)
+
+	var/list/bonus_hp_list = list()
+	SEND_SIGNAL(xeno, COMSIG_MOBA_GET_BONUS_HP, bonus_hp_list)
+
+	var/shield_amount = (damage_accumulated * shield_mod) * (bonus_hp_list[1] * 0.01)
+	xeno.add_xeno_shield(shield_amount, XENO_SHIELD_SOURCE_CUMULATIVE_GENERIC, duration = shield_duration, decay_amount_per_second = shield_amount/4, add_shield_on = TRUE, max_shield = INFINITY) // >:3
+
+	xeno.ability_speed_modifier -= slow
+	damage_accumulated = 0
+
+	to_chat(xeno, SPAN_XENONOTICE("We stop tanking incoming damage."))
+	xeno.remove_filter("steelcrest_enraging")
+
+/datum/action/xeno_action/onclick/moba_soak/level_up_ability(new_level)
+	xeno_cooldown = src::xeno_cooldown - ((1 SECONDS) * (new_level - 1))
+	shield_mod = src::shield_mod + (0.25 * (new_level - 1))
+	shield_duration = src::shield_duration + ((1 SECONDS) * (new_level - 1))
+
+	desc = "Take 50% reduced damage from all sources for 3 seconds. During this time, you are unable to attack and have your speed reduced by 0.2. Once the time ends, you gain [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "175", "200", "225")]% (+1% bHP) of the damage taken as shields. These shields decay after [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "4", "5", "6")] seconds. Cooldown of [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "16", "15", "14")] seconds. Plasma cost 100."
+
 // DO THE HARLEM SHAKE
 /datum/action/xeno_action/onclick/moba_tremor
 	name = "Tremor"
 	desc = "Root yourself in place and begin channeling for 2 seconds, pausing any shield decay and raising your tail in the air. At the end of the channel, slam your tail down. All enemies within a screen's range of you are stunned for 2 seconds with additional screenshake. For every 100/75/50 shield you have, increase the range of the stun by 1 tile and increase the stun's duration by 0.5 seconds. Once the channel finishes, lose all shields you currently have. Cooldown 180/165/150 seconds. Plasma cost 225."
 	action_icon_state = "fortify"
-	macro_path = /datum/action/xeno_action/verb/verb_tail_sweep
+	macro_path = /datum/action/xeno_action/verb/verb_tremor
 	action_type = XENO_ACTION_ACTIVATE
 	ability_primacy = XENO_PRIMARY_ACTION_4
 	plasma_cost = 225
