@@ -37,8 +37,7 @@
 
 /datum/moba_caste/defender/proc/on_stunning_enemy(mob/living/carbon/xenomorph/source, mob/living/target)
 	SIGNAL_HANDLER
-
-	if(HAS_TRAIT(target, TRAIT_INCAPACITATED))
+	if(HAS_TRAIT(target, TRAIT_IMMOBILIZED))
 		source.apply_status_effect(/datum/status_effect/fortification)
 
 /datum/action/xeno_action/activable/moba_headbutt
@@ -83,8 +82,8 @@
 	fendy.visible_message(SPAN_XENOWARNING("[fendy] rams [carbone] with its armored crest!"),
 	SPAN_XENOWARNING("We ram [carbone] with our armored crest!"))
 
-	carbone.KnockDown(stun/10)
 	SEND_SIGNAL(fendy, COMSIG_MOBA_STUN_GIVEN, carbone)
+	carbone.KnockDown(stun/10)
 
 	var/facing = get_dir(fendy, carbone)
 
@@ -150,8 +149,8 @@
 		//target.apply_status_effect(/datum/status_effect/slow, target.cur_speed * slow, debuff_duration)
 		var/turf/destination = get_step(target, get_dir(xeno, target))
 		if(LinkBlocked(target, target.loc, destination))
-			target.KnockDown(debuff_duration/10)
 			SEND_SIGNAL(xeno, COMSIG_MOBA_STUN_GIVEN, target)
+			target.KnockDown(debuff_duration/10)
 			playsound(destination, "slam", 50)
 			target.animation_spin(5, 1)
 		step_away(target, xeno, sweep_range, 2)
