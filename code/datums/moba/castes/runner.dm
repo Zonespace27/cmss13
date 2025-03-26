@@ -3,10 +3,15 @@
 	equivalent_xeno_path = /mob/living/carbon/xenomorph/runner
 	name = XENO_CASTE_RUNNER
 	desc = {"
-		placeholder
+		Extremely mobile yet fragile caste focused on ambushes.<br>
+		<b>P:</b> After landing three slashes on a target in short succession, quickly make a fourth attack.<br>
+		<b>1:</b> Launch bone spurs at a target, dealing damage and slowing them.<br>
+		<b>2:</b> Pounce at a nearby enemy, slashing them twice and slowing them.<br>
+		<b>3:</b> Kick dirt in a cone behind you, slowing and blurring the vision of any enemies hit.<br>
+		<b>U:</b> Gain a speed bonus and ignore some attacks for a short time.
 	"}
 	category = MOBA_ARCHETYPE_ASSASSIN
-	icon_state = "runner" // needs icon
+	icon_state = "runner"
 	ideal_roles = list(MOBA_LANE_JUNGLE)
 	starting_health = 400
 	ending_health = 1600
@@ -17,10 +22,10 @@
 	starting_plasma_regen = 1.5
 	ending_plasma_regen = 3.2
 	starting_armor = 0
-	ending_armor = 10
+	ending_armor = 5
 	starting_acid_armor = 0
-	ending_acid_armor = 10
-	speed = 0
+	ending_acid_armor = 5
+	speed = 0.4
 	attack_delay_modifier = 0.6
 	starting_attack_damage = 37.5
 	ending_attack_damage = 60
@@ -37,7 +42,6 @@
 
 // [Insert bone joke here]
 /datum/action/xeno_action/activable/runner_skillshot/moba
-	desc = "Launch bone spurs at a target. On hit, deals 40/52.5/65 (+35% AD) physical damage and slows the target by 40/60/75% for 1/1.5/2 seconds. Cooldown 12/10/8 seconds. Plasma cost of 70."
 	ability_primacy = XENO_PRIMARY_ACTION_1
 	xeno_cooldown = 12 SECONDS
 	plasma_cost = 70
@@ -54,6 +58,10 @@
 	var/duration = 1 SECONDS
 	var/slow = 0.3
 
+/datum/ammo/xeno/bone_chips/spread/runner_skillshot/moba/on_bullet_generation(obj/projectile/generated_projectile, mob/living/carbon/xenomorph/bullet_generator)
+	. = ..()
+	generated_projectile.damage = damage + (bullet_generator.melee_damage_upper * 0.25)
+
 /datum/ammo/xeno/bone_chips/spread/runner_skillshot/moba/on_hit_mob(mob/living/M, obj/projectile/P)
 	if(ishuman_strict(M) || isxeno(M))
 		playsound(M, 'sound/effects/spike_hit.ogg', 25, 1, 1)
@@ -69,7 +77,7 @@
 		if(3)
 			ammo_type = /datum/ammo/xeno/bone_chips/spread/runner_skillshot/moba/lvl_three
 
-	desc = "Launch bone spurs at a target. On hit, deals [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 40, 52.5, 65)] (+35% AD) physical damage and slows the target by [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 40, 60, 75)]% for [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 1, 1.5, 2)] seconds. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 12, 10, 8)] seconds. Plasma cost of 70."
+	desc = "Launch bone spurs at a target. On hit, deals [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 40, 52.5, 65)] (+25% AD) physical damage and slows the target by [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 40, 60, 75)]% for [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 1, 1.5, 2)] seconds. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 12, 10, 8)] seconds. Plasma cost of 70."
 
 /datum/ammo/xeno/bone_chips/spread/runner_skillshot/moba/lvl_two
 	damage = 52.5
@@ -103,6 +111,7 @@
 	var/mob/living/carbon/target = living
 	var/mob/living/carbon/xenomorph/xeno = owner
 
+	xeno.a_intent_change(INTENT_HARM)
 	target.attack_alien(xeno)
 	if(isxeno(target))
 		target.apply_status_effect(/datum/status_effect/slow, target.cur_speed * slow, 1 SECONDS)
@@ -215,7 +224,7 @@
 
 /datum/action/xeno_action/onclick/in_the_zone/level_up_ability(new_level)
 	xeno_cooldown = src::xeno_cooldown - ((new_level - 1) * (15 SECONDS))
-	evasion = src::evasion + ((new_level - 1) * 0.1)
-	duration = src::duration + ((new_level - 1) * 2)
+	evasion = src::evasion + ((new_level - 1) * 10)
+	duration = src::duration + ((new_level - 1) * (2 SECONDS))
 
 	desc = "For [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 6, 8, 10)] seconds, gain a -0.5 speed bonus and ignore [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 15, 25, 35)]% of all attacks targeted at you. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, 120, 105, 90)] seconds. Plasma cost of 100."

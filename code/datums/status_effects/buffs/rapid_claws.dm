@@ -6,6 +6,7 @@
 	should_delete_at_no_stacks = FALSE
 	max_stacks = 3
 	var/given_player_lifesteal = 0
+	var/datum/weakref/last_hit_mob
 
 /datum/status_effect/stacking/rapid_claws/on_apply()
 	. = ..()
@@ -38,6 +39,13 @@
 	if(xeno.hive.is_ally(attacking))
 		return // in case friendly-fire with slashes is somehow possible
 
+	if(last_hit_mob)
+		if(last_hit_mob.resolve() != attacking)
+			stacks = 0
+			last_hit_mob = WEAKREF(attacking)
+	else
+		last_hit_mob = WEAKREF(attacking)
+
 	tick_interval = world.time + initial(tick_interval) //refreshing the timer
 	stacks++
 
@@ -50,9 +58,11 @@
 		stacks = 0
 
 /datum/status_effect/stacking/rapid_claws/proc/additional_slash(mob/living/carbon/xenomorph/attacking)
+	var/mob/living/carbon/xenomorph/xeno = owner
+	xeno.a_intent_change(INTENT_HARM)
 	attacking.attack_alien(owner) // pretty confusing, but its actually us attacking the target
 	owner.next_move -= 0.3 SECONDS // redeeming cd from additional slash
 	stacks = 0
 	if(owner.hud_used?.locate_leader)
 		// showing a 3/3 count for a brief moment
-		owner.hud_used.locate_leader.maptext = "<span class='maptext' style='color: red'>Slashes: <b>[max_stacks]</b>/<b>[max_stacks]</b></span>"
+		owner.hud_used.locate_leader.maptext = "<span class='maptext' style='color: red'>Slashes: <b>[stacks]</b>/<b>[max_stacks]</b></span>"
