@@ -48,3 +48,6 @@
 
 /// (mob/living)
 #define COMSIG_MOB_ALIEN_ATTACK "mob_alien_attack"
+
+/// (defender's stun)
+#define COMSIG_MOBA_STUN_GIVEN "moba_stun_given"
