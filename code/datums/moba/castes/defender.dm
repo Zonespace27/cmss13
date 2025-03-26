@@ -27,7 +27,7 @@
 	abilities_to_add = list(
 		/datum/action/xeno_action/activable/moba_headbutt,
 		/datum/action/xeno_action/onclick/moba_tail_sweep,
-		/datum/action/xeno_action/activable/life_transfer,
+		/datum/action/xeno_action/onclick/moba_soak,
 		/datum/action/xeno_action/onclick/moba_tremor,
 	)
 
