@@ -148,12 +148,7 @@
 	. = ..()
 	var/mob/living/L = .
 	if(istype(L))
-		var/datum/status_effect/stacking/bleed/bleed = L.has_status_effect(/datum/status_effect/stacking/bleed)
-		if(!bleed)
-			bleed = L.apply_status_effect(/datum/status_effect/stacking/bleed, 1)
-		else
-			bleed.add_stacks(1)
-
+		L.apply_status_effect(/datum/status_effect/bleed)
 // Here be bosses
 
 /mob/living/simple_animal/hostile/megacarp //zonenote look into bounds
@@ -276,3 +271,52 @@
 			rended = L.apply_status_effect(/datum/status_effect/stacking/rended_armor, 1)
 		else
 			rended.add_stacks(1)
+
+/mob/living/simple_animal/hostile/reaper
+	name = "Reaper"
+	desc = "A towering icon of death and destruction."
+	icon = 'icons/mob/xenos/castes/moba/reaper.dmi'
+	icon_state = "Normal Reaper Walking"
+	icon_living = "Normal Reaper Walking"
+	icon_dead = "Normal Reaper Dead"
+	icon_gib = null
+	speak_chance = 0
+	turns_per_move = 5
+	response_harm = "mauls the"
+	speed = 5
+	maxHealth = 7500
+	health = 7500
+
+	harm_intent_damage = 10
+	melee_damage_lower = 55
+	melee_damage_upper = 55
+	attacktext = "viscerates"
+	attack_sound = 'sound/weapons/alien_tail_attack.ogg'
+
+	break_stuff_probability = 15
+	faction = "reaper"
+
+/mob/living/simple_animal/hostile/reaper/death(datum/cause_data/cause_data, gibbed, deathmessage)
+	. = ..()
+	if(!.)
+		return .
+
+	if(!gibbed)
+		gib(src)
+
+/mob/living/simple_animal/hostile/reaper/FindTarget()
+	. = ..()
+	if(.)
+		manual_emote("emits a low gutteral screech towards [.]")
+
+/mob/living/simple_animal/hostile/reaper/AttackingTarget()
+	. = ..()
+	/*var/mob/living/L = .
+	if(istype(L))
+		L.apply_damage(true_damage, BRUTE)
+
+		var/datum/status_effect/stacking/rended_armor/rended = L.has_status_effect(/datum/status_effect/stacking/rended_armor)
+		if(!rended)
+			rended = L.apply_status_effect(/datum/status_effect/stacking/rended_armor, 1)
+		else
+			rended.add_stacks(1)*/
