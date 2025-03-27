@@ -1,6 +1,6 @@
 /datum/status_effect/in_the_zone
 	id = "in_the_zone"
-	status_type = STATUS_EFFECT_REPLACE
+	status_type = STATUS_EFFECT_REFRESH
 	alert_type = null
 	var/evasion_chance
 	var/speed_bonus
