@@ -214,8 +214,8 @@
 /datum/action/xeno_action/onclick/moba_soak/proc/damage_accumulate(owner, damage_data, damage_type)
 	SIGNAL_HANDLER
 
+	damage_accumulated += damage_data["damage"] // before, so the shield amount isnt reduced by 50%
 	damage_data["damage"] *= incoming_damage_mod
-	damage_accumulated += damage_data["damage"]
 
 /datum/action/xeno_action/onclick/moba_soak/proc/stop_accumulating()
 	var/mob/living/carbon/xenomorph/xeno = owner
@@ -277,7 +277,7 @@
 	for(var/datum/xeno_shield/shield_effect as anything in xeno.xeno_shields)
 		shield_effect.decay_amount_per_second = 0
 
-	xeno.create_shield(windup, "empower")
+	xeno.create_shield(windup-1, "empower") // -1 or stomp overlay will also be removed bc timings
 	playsound(xeno, 'sound/voice/xeno_praetorian_screech.ogg', 50, FALSE)
 
 	if(!do_after(xeno, windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
