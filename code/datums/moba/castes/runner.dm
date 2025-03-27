@@ -204,7 +204,7 @@
 	desc = "For 6/8/10 seconds, gain a -0.5 speed bonus and ignore 15/25/35% of all attacks targeted at you. Cooldown 120/105/90 seconds. Plasma cost of 100."
 	action_icon_state = "tumble"
 	xeno_cooldown = 120 SECONDS
-	ability_primacy = XENO_PRIMARY_ACTION_3
+	ability_primacy = XENO_PRIMARY_ACTION_4
 	plasma_cost = 100
 	var/speed_bonus = -0.5
 	var/evasion = 15 // %
