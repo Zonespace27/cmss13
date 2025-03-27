@@ -3,7 +3,12 @@
 	equivalent_xeno_path = /mob/living/carbon/xenomorph/defender
 	name = XENO_CASTE_DEFENDER
 	desc = {"
-		placeholder
+		Slow-moving frontliner that tanks through brute force and shields.<br>
+		<b>P:</b> Stunning an already-stunned target grants a temporary shield.<br>
+		<b>1:</b> Headbutt a nearby target, knocking them back and stunning them.<br>
+		<b>2:</b> Knock back any nearby enemies, slowing and potentially stunning them.<br>
+		<b>3:</b> Fortify yourself, converting damage taken into temporary shields.<br>
+		<b>U:</b> After a short wind-up, smash your tail down, converting your shields into a stun on all nearby enemies.
 	"}
 	category = MOBA_ARCHETYPE_TANK
 	icon_state = "defender"
@@ -20,7 +25,7 @@
 	ending_armor = 35
 	starting_acid_armor = 0
 	ending_acid_armor = 25
-	speed = -0.6
+	speed = 1.2
 	attack_delay_modifier = 0
 	starting_attack_damage = 37.5
 	ending_attack_damage = 52.5
@@ -37,13 +42,13 @@
 
 /datum/moba_caste/defender/proc/on_stunning_enemy(mob/living/carbon/xenomorph/source, mob/living/target)
 	SIGNAL_HANDLER
+
 	if(HAS_TRAIT(target, TRAIT_IMMOBILIZED))
 		source.apply_status_effect(/datum/status_effect/fortification)
 
 // so called metalheads when they meet magnetheads:
 /datum/action/xeno_action/activable/moba_headbutt
 	name = "Headbutt"
-	desc = "Knock back a targeted enemy by 1 tile, stunning them for 1.5/2/2.5 seconds. Additionally deals 30/45/60 (+25% AD) physical damage. Cooldown 8/7.5/7 seconds. Plasma cost 60."
 	action_icon_state = "headbutt"
 	macro_path = /datum/action/xeno_action/verb/verb_headbutt
 	action_type = XENO_ACTION_CLICK
@@ -59,7 +64,7 @@
 	if(!istype(fendy))
 		return
 
-	if(!isxeno_human(target_atom) || fendy.can_not_harm(target_atom))
+	if(!isliving(target_atom) || fendy.can_not_harm(target_atom))
 		return
 
 	if(!fendy.check_state())
@@ -71,31 +76,31 @@
 	if(!check_and_use_plasma_owner())
 		return
 
-	var/mob/living/carbon/carbone = target_atom
-	if(carbone.stat == DEAD)
+	var/mob/living/living_target = target_atom
+	if(living_target.stat == DEAD)
 		return
 
-	var/distance = get_dist(fendy, carbone)
+	var/distance = get_dist(fendy, living_target)
 	if(distance > 1)
 		return
 
-	carbone.last_damage_data = create_cause_data(fendy.caste_type, fendy)
-	fendy.visible_message(SPAN_XENOWARNING("[fendy] rams [carbone] with its armored crest!"),
-	SPAN_XENOWARNING("We ram [carbone] with our armored crest!"))
+	living_target.last_damage_data = create_cause_data(fendy.caste_type, fendy)
+	fendy.visible_message(SPAN_XENOWARNING("[fendy] rams [living_target] with its armored crest!"),
+	SPAN_XENOWARNING("We ram [living_target] with our armored crest!"))
 
-	SEND_SIGNAL(fendy, COMSIG_MOBA_STUN_GIVEN, carbone)
-	carbone.KnockDown(stun/10)
+	SEND_SIGNAL(fendy, COMSIG_MOBA_STUN_GIVEN, living_target)
+	living_target.KnockDown(stun * 0.1)
 
-	var/facing = get_dir(fendy, carbone)
+	var/facing = get_dir(fendy, living_target)
 
 	// Hmm today I will kill a marine while looking away from them
-	fendy.face_atom(carbone)
-	fendy.animation_attack_on(carbone)
-	fendy.flick_attack_overlay(carbone, "punch")
-	fendy.throw_carbon(carbone, facing, 1, SPEED_SLOW, shake_camera = FALSE, immobilize = FALSE)
-	playsound(carbone,'sound/weapons/alien_claw_block.ogg', 50, 1)
+	fendy.face_atom(living_target)
+	fendy.animation_attack_on(living_target)
+	fendy.flick_attack_overlay(living_target, "punch")
+	fendy.throw_carbon(living_target, facing, 1, SPEED_SLOW, shake_camera = FALSE, immobilize = FALSE) //surely we can throw a living through throw carbon
+	playsound(living_target,'sound/weapons/alien_claw_block.ogg', 50, 1)
 
-	carbone.apply_armoured_damage(damage + (fendy.melee_damage_upper * 0.25), ARMOR_MELEE, BRUTE)
+	living_target.apply_armoured_damage(damage + (fendy.melee_damage_upper * 0.25), ARMOR_MELEE, BRUTE)
 
 	apply_cooldown()
 	return ..()
@@ -142,8 +147,8 @@
 
 	var/sweep_range = 1
 	var/debuff_duration = 1.5 SECONDS
-	for(var/mob/living/carbon/target in orange(sweep_range, get_turf(xeno)))
-		if(!isxeno_human(target) || xeno.can_not_harm(target))
+	for(var/mob/living/target in orange(sweep_range, get_turf(xeno)))
+		if(xeno.can_not_harm(target))
 			continue
 		if(target.stat == DEAD)
 			continue
@@ -151,7 +156,7 @@
 		var/turf/destination = get_step(target, get_dir(xeno, target))
 		if(LinkBlocked(target, target.loc, destination))
 			SEND_SIGNAL(xeno, COMSIG_MOBA_STUN_GIVEN, target)
-			target.KnockDown(debuff_duration/10)
+			target.KnockDown(debuff_duration * 0.1)
 			playsound(destination, "slam", 50)
 			target.animation_spin(5, 1)
 		step_away(target, xeno, sweep_range, 2)
@@ -171,7 +176,6 @@
 // "I am fucking invincible" - some bald guy
 /datum/action/xeno_action/onclick/moba_soak
 	name = "Soak"
-	desc = "Take 50% reduced damage from all sources for 3 seconds. During this time, you are unable to attack and have your speed reduced by 0.2. Once the time ends, you gain 175/200/225% (+1% bHP) of the damage taken as shields. These shields decay after 4/5/6 seconds. Cooldown of 16/15/14 seconds. Plasma cost 100."
 	action_icon_state = "soak"
 	macro_path = /datum/action/xeno_action/verb/verb_soak
 	action_type = XENO_ACTION_ACTIVATE
@@ -179,7 +183,7 @@
 	plasma_cost = 100
 	xeno_cooldown = 16 SECONDS
 
-	var/slow = 0.2
+	var/slow = 0.5
 	var/shield_mod = 1.75
 	var/shield_duration = 4 SECONDS
 	var/incoming_damage_mod = 0.5
@@ -200,8 +204,9 @@
 	RegisterSignal(xeno, COMSIG_XENO_TAKE_DAMAGE, PROC_REF(damage_accumulate))
 	addtimer(CALLBACK(src, PROC_REF(stop_accumulating)), 3 SECONDS)
 
-	xeno.balloon_alert(xeno, "begins to tank incoming damage!")
+	xeno.balloon_alert(xeno, "begins to soak incoming damage!")
 	to_chat(xeno, SPAN_XENONOTICE("We begin to tank incoming damage!"))
+	xeno.fortify = TRUE
 
 	xeno.add_filter("steelcrest_enraging", 1, list("type" = "outline", "color" = "#421313", "size" = 1))
 	playsound(get_turf(xeno), 'sound/effects/stonedoor_openclose.ogg', 30, 1)
@@ -231,6 +236,7 @@
 	damage_accumulated = 0
 
 	to_chat(xeno, SPAN_XENONOTICE("We stop tanking incoming damage."))
+	xeno.balloon_alert(xeno, "ceases soaking incoming damage!")
 	xeno.remove_filter("steelcrest_enraging")
 
 /datum/action/xeno_action/onclick/moba_soak/level_up_ability(new_level)
@@ -238,12 +244,11 @@
 	shield_mod = src::shield_mod + (0.25 * (new_level - 1))
 	shield_duration = src::shield_duration + ((1 SECONDS) * (new_level - 1))
 
-	desc = "Take 50% reduced damage from all sources for 3 seconds. During this time, you are unable to attack and have your speed reduced by 0.2. Once the time ends, you gain [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "175", "200", "225")]% (+1% bHP) of the damage taken as shields. These shields decay after [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "4", "5", "6")] seconds. Cooldown of [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "16", "15", "14")] seconds. Plasma cost 100."
+	desc = "Take 50% reduced damage from all sources for 3 seconds. During this time, you are unable to attack and have your speed reduced by 0.5. Once the time ends, you gain [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "125", "150", "175")]% (+1% bonus HP) of the pre-mitigation damage taken as shields. These shields decay after [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "4", "5", "6")] seconds. Cooldown of [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "16", "15", "14")] seconds. Plasma cost 100."
 
 // DO THE HARLEM SHAKE
 /datum/action/xeno_action/onclick/moba_tremor
 	name = "Tremor"
-	desc = "Root yourself in place and begin channeling for 2 seconds, pausing any shield decay and raising your tail in the air. At the end of the channel, slam your tail down. All enemies within a screen's range of you are stunned for 2 seconds with additional screenshake. For every 100/75/50 shield you have, increase the range of the stun by 1 tile and increase the stun's duration by 0.5 seconds. Once the channel finishes, lose all shields you currently have. Cooldown 180/165/150 seconds. Plasma cost 225."
 	action_icon_state = "fortify"
 	macro_path = /datum/action/xeno_action/verb/verb_tremor
 	action_type = XENO_ACTION_ACTIVATE
@@ -251,7 +256,7 @@
 	plasma_cost = 225
 	xeno_cooldown = 180 SECONDS
 
-	var/windup = 2 SECONDS
+	var/windup = 3 SECONDS
 	var/duration = 2 SECONDS
 	var/range = 7
 	var/duration_shield_div = 100
@@ -300,8 +305,8 @@
 	var/true_duration = duration + ((0.5 SECONDS) * (total_shields / duration_shield_div))
 	var/true_range = floor(range + (total_shields / duration_shield_div))
 
-	for(var/mob/living/carbon/target in orange(true_range, get_turf(xeno)))
-		if(!isxeno_human(target) || xeno.can_not_harm(target))
+	for(var/mob/living/target in orange(true_range, get_turf(xeno)))
+		if(xeno.can_not_harm(target))
 			continue
 
 		if(target.stat == DEAD)
@@ -321,4 +326,4 @@
 	xeno_cooldown = src::xeno_cooldown - ((15 SECONDS) * (new_level - 1))
 	duration_shield_div = src::duration_shield_div - (25 * (new_level - 1))
 
-	desc = "Root yourself in place and begin channeling for 2 seconds, pausing any shield decay and raising your tail in the air. At the end of the channel, slam your tail down. All enemies within a screen's range of you are stunned for 2 seconds with additional screenshake. For every [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "100", "75", "50")] shield you have, increase the range of the stun by 1 tile and increase the stun's duration by 0.5 seconds. Once the channel finishes, lose all shields you currently have. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "180", "165", "150")] seconds. Plasma cost 225."
+	desc = "Root yourself in place and begin channeling for 3 seconds, pausing any shield decay and raising your tail in the air. At the end of the channel, slam your tail down. All enemies within 7 tiles of you are stunned for 2 seconds. For every [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "100", "75", "50")] shield you have, increase the range of the stun by 1 tile and increase the stun's duration by 0.5 seconds. Once the channel finishes, lose all shields you currently have. Cooldown [MOBA_LEVEL_ABILITY_DESC_HELPER(new_level, "180", "165", "150")] seconds. Plasma cost 225."

@@ -16,22 +16,21 @@
 	var/datum/moba_player/player = player_list[1]
 	switch(player.level)
 		if(1 to 4)
-			src.duration = 12 SECONDS + shield_duration
+			duration = 12 SECONDS + shield_duration
 		if(5 to 8)
-			src.duration = 11 SECONDS + shield_duration
+			duration = 11 SECONDS + shield_duration
 		else
-			src.duration = 10 SECONDS + shield_duration
+			duration = 10 SECONDS + shield_duration
 
 	var/list/bonus_hp_list = list()
 	SEND_SIGNAL(owner, COMSIG_MOBA_GET_BONUS_HP, bonus_hp_list)
 
 	var/mob/living/carbon/xenomorph/xeno = owner
-	var/shield_amount = 0
 
 	// configure shield amt function here
-	shield_amount = 45 + (player.level * 15) + (bonus_hp_list[1] * 0.2)
+	var/shield_amount = 45 + (player.level * 15) + (bonus_hp_list[1] * 0.2)
 	shield_amount *= 1 + (xeno.armor_deflection / 50)
 
-	xeno.add_xeno_shield(shield_amount, XENO_SHIELD_SOURCE_SHIELD_PILLAR, duration = shield_duration, decay_amount_per_second = shield_amount/4, add_shield_on = TRUE, max_shield = INFINITY) // >:3
+	xeno.add_xeno_shield(shield_amount, XENO_SHIELD_SOURCE_FORTIFICATION, duration = shield_duration, decay_amount_per_second = shield_amount * 0.25, add_shield_on = TRUE, max_shield = INFINITY) // >:3
 	xeno.flick_heal_overlay(1 SECONDS, "#ffa800")
 	xeno.xeno_jitter(15)
