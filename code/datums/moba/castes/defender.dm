@@ -13,6 +13,7 @@
 	category = MOBA_ARCHETYPE_TANK
 	icon_state = "defender"
 	ideal_roles = list(MOBA_LANE_TOP)
+	mob_size = MOB_SIZE_BIG
 	starting_health = 540
 	ending_health = 1800
 	starting_health_regen = 2
