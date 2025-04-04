@@ -80,7 +80,10 @@
 
 	var/mob/living/carbon/xenomorph/target_nearby = locate() in range(5, home_turf)
 	if(target_nearby)
-		parent_simplemob.stance = HOSTILE_STANCE_ATTACK
+		if(get_dist(parent_simplemob, target_nearby) > 1)
+			parent_simplemob.stance = HOSTILE_STANCE_ATTACK
+		else
+			parent_simplemob.stance = HOSTILE_STANCE_ATTACKING
 		parent_simplemob.target_mob_ref = WEAKREF(target_nearby)
 		return
 
