@@ -411,6 +411,9 @@
 	for(var/datum/moba_boon/boon as anything in (player_datum.right_team ? team2_boons : team1_boons))
 		boon.on_friendly_spawn(xeno, player_datum, player_comp)
 
+	playsound_client(player_datum.tied_client, 'sound/voice/holy_chorus.ogg', vol = 50)
+	window_flash(player_datum.tied_client)
+
 /datum/moba_controller/proc/move_disconnected_player_to_body(mob/source)
 	SIGNAL_HANDLER
 
