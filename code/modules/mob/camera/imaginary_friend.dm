@@ -3,7 +3,7 @@
 	real_name = "imaginary friend"
 	desc = "A wonderful yet fake friend."
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
+	lighting_alpha = LIGHTING_PLANE_ALPHA_SOMEWHAT_INVISIBLE
 	see_invisible = SEE_INVISIBLE_OBSERVER
 	stat = DEAD // Keep hearing ghosts and other IFs
 	invisibility = INVISIBILITY_MAXIMUM
@@ -120,6 +120,8 @@
 		if(LIGHTING_PLANE_ALPHA_VISIBLE)
 			lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
 		if(LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE)
+			lighting_alpha = LIGHTING_PLANE_ALPHA_SOMEWHAT_INVISIBLE
+		if(LIGHTING_PLANE_ALPHA_SOMEWHAT_INVISIBLE)
 			lighting_alpha = LIGHTING_PLANE_ALPHA_INVISIBLE
 		else
 			lighting_alpha = LIGHTING_PLANE_ALPHA_VISIBLE
@@ -150,21 +152,21 @@
 	var/datum/mob_hud/hud
 	switch(hud_choice)
 		if("Medical HUD")
-			hud = huds[MOB_HUD_MEDICAL_OBSERVER]
+			hud = GLOB.huds[MOB_HUD_MEDICAL_OBSERVER]
 		if("Security HUD")
-			hud = huds[MOB_HUD_SECURITY_ADVANCED]
+			hud = GLOB.huds[MOB_HUD_SECURITY_ADVANCED]
 		if("Squad HUD")
-			hud = huds[MOB_HUD_FACTION_OBSERVER]
+			hud = GLOB.huds[MOB_HUD_FACTION_OBSERVER]
 		if("Xeno Status HUD")
-			hud = huds[MOB_HUD_XENO_STATUS]
+			hud = GLOB.huds[MOB_HUD_XENO_STATUS]
 		if("Faction UPP HUD")
-			hud = huds[MOB_HUD_FACTION_UPP]
+			hud = GLOB.huds[MOB_HUD_FACTION_UPP]
 		if("Faction Wey-Yu HUD")
-			hud = huds[MOB_HUD_FACTION_WY]
+			hud = GLOB.huds[MOB_HUD_FACTION_WY]
 		if("Faction TWE HUD")
-			hud = huds[MOB_HUD_FACTION_TWE]
+			hud = GLOB.huds[MOB_HUD_FACTION_TWE]
 		if("Faction CLF HUD")
-			hud = huds[MOB_HUD_FACTION_CLF]
+			hud = GLOB.huds[MOB_HUD_FACTION_CLF]
 
 	if(hud_choice in current_huds)
 		hud.remove_hud_from(src, src)
@@ -280,6 +282,7 @@
 	action_icon_state = "joinmob"
 
 /datum/action/innate/imaginary_orbit/action_activate()
+	. = ..()
 	var/mob/camera/imaginary_friend/friend = owner
 	friend.recall()
 
@@ -288,6 +291,7 @@
 	action_icon_state = "hidemob"
 
 /datum/action/innate/imaginary_hide/action_activate()
+	. = ..()
 	var/mob/camera/imaginary_friend/friend = owner
 	if(friend.hidden)
 		friend.hidden = FALSE

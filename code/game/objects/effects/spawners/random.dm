@@ -203,7 +203,7 @@
 				/obj/item/storage/belt/champion,\
 				/obj/item/tool/soap/deluxe,\
 				/obj/item/tool/pickaxe/silver,\
-				/obj/item/tool/pen/invisible,\
+				/obj/item/tool/pen/white,\
 				/obj/item/explosive/grenade/smokebomb,\
 				/obj/item/corncob,\
 				/obj/item/poster,\
@@ -277,7 +277,7 @@
 				prob(4);/obj/item/clothing/glasses/meson/refurbished,\
 				prob(4);/obj/item/clothing/glasses/science,\
 				prob(4);/obj/item/clothing/glasses/hud/sensor,\
-				prob(4);/obj/item/clothing/glasses/sunglasses/sechud/eyepiece)
+				prob(4);/obj/item/clothing/glasses/hud/security)
 
 /obj/effect/spawner/random/goggles/lowchance
 	spawn_nothing_percentage = 80
@@ -342,9 +342,9 @@
 	var/gunpath = pick(guns)
 	var/ammopath
 	if(istype(gunpath, /obj/item/weapon/gun/shotgun))
-		ammopath = pick(shotgun_boxes_12g)
+		ammopath = pick(GLOB.shotgun_boxes_12g)
 	else if(istype(gunpath, /obj/item/weapon/gun/launcher/grenade))
-		ammopath = pick(grenade_packets)
+		ammopath = pick(GLOB.grenade_packets)
 	else
 		ammopath = guns[gunpath]
 	spawn_weapon_on_floor(gunpath, ammopath, rand(mags_min, mags_max))
@@ -358,7 +358,7 @@
 	if(gunpath)
 		gun = new gunpath(spawnloc)
 		if(scatter)
-			var/direction = pick(alldirs)
+			var/direction = pick(GLOB.alldirs)
 			var/turf/turf = get_step(gun, direction)
 			if(!turf || turf.density)
 				return
@@ -368,7 +368,7 @@
 			ammo = new ammopath(spawnloc)
 			if(scatter)
 				for(i=0, i<rand(1,3), i++)
-					var/direction = pick(alldirs)
+					var/direction = pick(GLOB.alldirs)
 					var/turf/turf = get_step(ammo, direction)
 					if(!turf || turf.density)
 						break
@@ -576,21 +576,15 @@
 // OB spawners
 */
 
-
-GLOBAL_VAR_INIT(spawn_ob, TRUE)
-
 /obj/effect/spawner/random/warhead
 	name = "random orbital warhead"
 	desc = "This is a random orbital warhead."
 	icon = 'icons/obj/items/new_assemblies.dmi'
-	icon = 'icons/obj/structures/props/almayer_props.dmi'
+	icon = 'icons/obj/structures/props/almayer/almayer_props.dmi'
 	icon_state = "ob_warhead_1"
 	spawn_on_roundstart = TRUE
 
 /obj/effect/spawner/random/warhead/item_to_spawn()
-	if(!GLOB.spawn_ob)
-		return /obj/item/paper/warhead_recycle
-
 	var/list/spawnables = list(
 		/obj/structure/ob_ammo/warhead/explosive,
 		/obj/structure/ob_ammo/warhead/incendiary,
