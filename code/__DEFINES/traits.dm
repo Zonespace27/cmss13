@@ -143,10 +143,28 @@
 // #define TRAIT_X "t_x"
 
 //-- mob traits --
-/// Prevents voluntary movement.
-#define TRAIT_IMMOBILIZED "immobilized"
 /// Apply this to make a mob not dense, and remove it when you want it to no longer make them undense, other sorces of undesity will still apply. Always define a unique source when adding a new instance of this!
 #define TRAIT_UNDENSE "undense"
+/// Forces the user to stay unconscious.
+#define TRAIT_KNOCKEDOUT "knockedout"
+/// Prevents voluntary movement.
+#define TRAIT_IMMOBILIZED "immobilized"
+/// Prevents voluntary standing or staying up on its own.
+#define TRAIT_FLOORED "floored"
+/// Forces user to stay standing
+#define TRAIT_FORCED_STANDING "forcedstanding"
+/// Stuns preventing movement and using objects but without further impairement
+#define TRAIT_INCAPACITATED "incapacitated"
+/// Disoriented. Unable to talk properly, and unable to use some skills as Xeno
+#define TRAIT_DAZED "dazed"
+/// Apply this to identify a mob as merged with weeds
+#define TRAIT_MERGED_WITH_WEEDS "merged_with_weeds"
+/// Apply this to identify a mob as temporarily muted
+#define TRAIT_TEMPORARILY_MUTED "temporarily_muted"
+/// Mob wont get hit by stray projectiles
+#define TRAIT_NO_STRAY "trait_no_stray"
+// only used by valkyrie
+#define TRAIT_VALKYRIE_ARMORED "trait_valkyrie_armored"
 
 // SPECIES TRAITS
 /// Knowledge of Yautja technology
@@ -157,7 +175,7 @@
 #define TRAIT_FOREIGN_BIO "t_foreign_bio"
 /// Eye color changes on intent. (G1 Synths and WJs)
 #define TRAIT_INTENT_EYES "t_intent_eyes"
-/// Masked synthetic biology. Basic medHUDs will percieve the mob as human. (Infiltrator Synths)
+/// Masked synthetic biology. Basic medHUDs will perceive the mob as human. (Infiltrator Synths)
 #define TRAIT_INFILTRATOR_SYNTH "t_infiltrator_synth"
 /// Makes it impossible to strip the inventory of this mob.
 #define TRAIT_UNSTRIPPABLE "t_unstrippable"
@@ -165,7 +183,11 @@
 // HIVE TRAITS
 /// If the Hive is a Xenonid Hive
 #define TRAIT_XENONID "t_xenonid"
-/// If the Hive delays round end (this is overriden for some hives). Does not occur naturally. Must be applied in events.
+/// if the xeno's connection to the hivemind is cut
+#define TRAIT_HIVEMIND_INTERFERENCE "t_interference"
+/// If the hive or xeno can use objects.
+#define TRAIT_OPPOSABLE_THUMBS "t_thumbs"
+/// If the Hive delays round end (this is overridden for some hives). Does not occur naturally. Must be applied in events.
 #define TRAIT_NO_HIVE_DELAY "t_no_hive_delay"
 /// If the Hive uses it's colors on the mobs. Does not occur naturally, excepting the Mutated hive.
 #define TRAIT_NO_COLOR "t_no_color"
@@ -211,8 +233,18 @@
 #define TRAIT_HARDCORE "t_hardcore"
 /// If the mob is able to use the vulture rifle or spotting scope
 #define TRAIT_VULTURE_USER "t_vulture_user"
+/// If the mob is currently loading a tutorial
+#define TRAIT_IN_TUTORIAL "t_in_tutorial"
 /// If the mob is cloaked in any form
 #define TRAIT_CLOAKED "t_cloaked"
+/// If the mob claimed a specialist set from a vendor
+#define TRAIT_SPEC_VENDOR "t_spec_vendor"
+/// If the mob claimed a specialist set from a kit
+#define TRAIT_SPEC_KIT "t_spec_kit"
+/// What spec set the mob has claimed, if any
+#define TRAIT_SPEC(spec_type) "t_spec_[spec_type]"
+/// If the mob won't drop items held in face slot when downed
+#define TRAIT_IRON_TEETH "t_iron_teeth"
 
 // -- ability traits --
 /// Xenos with this trait cannot have plasma transfered to them
@@ -221,6 +253,8 @@
 #define TRAIT_ABILITY_OVIPOSITOR "t_ability_ovipositor"
 /// Used for burrowed mobs, prevent's SG/sentrys/claymores from autofiring
 #define TRAIT_ABILITY_BURROWED "t_ability_burrowed"
+/// Xenos with this trait can toggle long sight while resting.
+#define TRAIT_ABILITY_SIGHT_IGNORE_REST "t_ability_sight_ignore_rest"
 
 //-- item traits --
 // TOOL TRAITS
@@ -249,7 +283,13 @@
 
 #define TRAIT_GUN_BIPODDED "t_gun_bipodded"
 
-#define TRAIT_GUN_LIGHT_DEACTIVATED "t_gun_light_deactivated"
+#define TRAIT_GUN_LIGHT_FORCE_DEACTIVATED "t_gun_light_deactivated"
+
+/// If this ID belongs to an ERT member
+#define TRAIT_ERT_ID "ert_id"
+
+/// If this item can hear things from inside one level of contents.
+#define TRAIT_HEARS_FROM_CONTENTS "t_hears_from_contents"
 
 // Miscellaneous item traits.
 // Do NOT bloat this category, if needed make a new category (like shoe traits, xeno item traits...)
@@ -287,6 +327,9 @@ GLOBAL_LIST_INIT(mob_traits, list(
 	TRAIT_REAGENT_SCANNER,
 	TRAIT_ABILITY_BURROWED,
 	TRAIT_VULTURE_USER,
+	TRAIT_IN_TUTORIAL,
+	TRAIT_SPEC_KIT,
+	TRAIT_SPEC_VENDOR,
 ))
 
 /*
@@ -296,7 +339,11 @@ GLOBAL_LIST_INIT(mob_traits, list(
 */
 GLOBAL_LIST_INIT(traits_by_type, list(
 	/mob = list(
+		"TRAIT_KNOCKEDOUT" = TRAIT_KNOCKEDOUT,
 		"TRAIT_IMMOBILIZED" = TRAIT_IMMOBILIZED,
+		"TRAIT_INCAPACITATED" = TRAIT_INCAPACITATED,
+		"TRAIT_FLOORED" = TRAIT_FLOORED,
+		"TRAIT_DAZED" = TRAIT_DAZED,
 		"TRAIT_UNDENSE" = TRAIT_UNDENSE,
 		"TRAIT_YAUTJA_TECH" = TRAIT_YAUTJA_TECH,
 		"TRAIT_SUPER_STRONG" = TRAIT_SUPER_STRONG,
@@ -322,10 +369,15 @@ GLOBAL_LIST_INIT(traits_by_type, list(
 		"TRAIT_CANNOT_EAT" = TRAIT_CANNOT_EAT,
 		"TRAIT_VULTURE_USER" = TRAIT_VULTURE_USER,
 		"TRAIT_CLOAKED" = TRAIT_CLOAKED,
+		"TRAIT_SPEC_KIT" = TRAIT_SPEC_KIT,
+		"TRAIT_SPEC_VENDOR" = TRAIT_SPEC_VENDOR,
 	),
 	/mob/living/carbon/xenomorph = list(
 		"TRAIT_ABILITY_NO_PLASMA_TRANSFER" = TRAIT_ABILITY_NO_PLASMA_TRANSFER,
 		"TRAIT_ABILITY_OVIPOSITOR" = TRAIT_ABILITY_OVIPOSITOR,
+		"TRAIT_OPPOSABLE_THUMBS" = TRAIT_OPPOSABLE_THUMBS,
+		"TRAIT_INTERFERENCE" = TRAIT_HIVEMIND_INTERFERENCE,
+		"TRAIT_VALKYRIE_ARMOR" = TRAIT_VALKYRIE_ARMORED,
 	),
 	/datum/hive_status = list(
 		"TRAIT_XENONID" = TRAIT_XENONID,
@@ -344,6 +396,7 @@ GLOBAL_LIST_INIT(traits_by_type, list(
 		"TRAIT_ITEM_EAR_EXCLUSIVE" = TRAIT_ITEM_EAR_EXCLUSIVE,
 		"TRAIT_OVERRIDE_CLICKDRAG" = TRAIT_OVERRIDE_CLICKDRAG,
 		"TRAIT_ITEM_RENAME_SPECIAL" = TRAIT_ITEM_RENAME_SPECIAL,
+		"TRAIT_HEARS_FROM_CONTENTS" = TRAIT_HEARS_FROM_CONTENTS,
 	),
 	/obj/item/clothing = list(
 		"TRAIT_CLOTHING_HOOD" = TRAIT_CLOTHING_HOOD
@@ -382,6 +435,8 @@ GLOBAL_LIST(trait_name_map)
 #define TRAIT_SOURCE_SPECIES "t_s_species"
 ///Status trait coming from the hive.
 #define TRAIT_SOURCE_HIVE "t_s_hive"
+///Status trait coming from xeno strains.
+#define TRAIT_SOURCE_STRAIN "t_s_strain"
 ///Status trait coming from being buckled.
 #define TRAIT_SOURCE_BUCKLE "t_s_buckle"
 ///Status trait coming from being assigned as [acting] squad leader.
@@ -390,6 +445,8 @@ GLOBAL_LIST(trait_name_map)
 #define TRAIT_SOURCE_JOB "t_s_job"
 ///Status trait forced by staff
 #define TRAIT_SOURCE_ADMIN "t_s_admin"
+/// Status trait coming from a tutorial
+#define TRAIT_SOURCE_TUTORIAL "t_s_tutorials"
 ///Status trait coming from equipment
 #define TRAIT_SOURCE_EQUIPMENT(slot) "t_s_equipment_[slot]"
 ///Status trait coming from skill
@@ -398,10 +455,17 @@ GLOBAL_LIST(trait_name_map)
 #define TRAIT_SOURCE_ATTACHMENT(slot) "t_s_attachment_[slot]"
 ///Status trait coming from ability
 #define TRAIT_SOURCE_ABILITY(ability) "t_s_ability_[ability]"
+#define TRAIT_SOURCE_LIMB(limb) "t_s_limb_[limb]"
+///Status trait coming from temporary_mute
+#define TRAIT_SOURCE_TEMPORARY_MUTE "t_s_temporary_mute"
 ///Status trait forced by the xeno action charge
 #define TRAIT_SOURCE_XENO_ACTION_CHARGE "t_s_xeno_action_charge"
+///Status trait coming from hivemind interference
+#define TRAIT_SOURCE_HIVEMIND_INTERFERENCE "t_s_hivemind_interference"
 ///Status trait coming from a xeno nest
 #define XENO_NEST_TRAIT "xeno_nest"
+///Status trait from a generic throw by xeno abilities
+#define XENO_THROW_TRAIT "xeno_throw_trait"
 //-- structure traits --
 ///Status trait coming from being flipped or unflipped.
 #define TRAIT_SOURCE_FLIP_TABLE "t_s_flip_table"
@@ -414,13 +478,41 @@ GLOBAL_LIST(trait_name_map)
 //Status trait coming from clothing.
 #define TRAIT_SOURCE_CLOTHING "t_s_clothing"
 
-/// traits associated with actively interacted machinery
-#define INTERACTION_TRAIT "interaction"
+/// trait associated to being buckled
+#define BUCKLED_TRAIT "buckled" // Yes the name doesn't conform. /tg/ appears to have changed naming style inbetween
+/// trait source when an effect is coming from a fakedeath effect (refactor this)
+#define FAKEDEATH_TRAIT "fakedeath"
+/// trait source where a condition comes from body state
+#define BODY_TRAIT "body"
+/// Trait associated to lying down (having a [lying_angle] of a different value than zero).
+#define LYING_DOWN_TRAIT "lying-down"
+/// trait associated to a stat value or range of
+#define STAT_TRAIT "stat"
+/// trait effect related to the queen ovipositor
+#define OVIPOSITOR_TRAIT "ovipositor"
+/// trait associated to being held in a chokehold
+#define CHOKEHOLD_TRAIT "chokehold"
 /// trait effect related to active specialist gear
 #define SPECIALIST_GEAR_TRAIT "specialist_gear"
 /// traits associated with usage of snowflake dropship double seats
 #define DOUBLE_SEATS_TRAIT "double_seats"
 /// traits associated with xeno on-ground weeds
 #define XENO_WEED_TRAIT "xeno_weed"
+/// traits associated with actively interacted machinery
+#define INTERACTION_TRAIT "interaction"
+/// traits associated with interacting with a dropship
+#define TRAIT_SOURCE_DROPSHIP_INTERACTION "dropship_interaction"
+/// traits bound by stunned status effects
+#define STUNNED_TRAIT "stunned"
+/// traits bound by knocked_down status effect
+#define KNOCKEDDOWN_TRAIT "knockeddown"
+/// traits bound by knocked_out status effect
+#define KNOCKEDOUT_TRAIT "knockedout"
+/// traits from being pounced
+#define POUNCED_TRAIT "pounced"
+/// traits from step_triggers on the map
+#define STEP_TRIGGER_TRAIT "step_trigger"
+/// traits from hacked machine interactions
+#define HACKED_TRAIT "hacked"
 /// traits from chloroform usage
 #define CHLOROFORM_TRAIT "chloroform"

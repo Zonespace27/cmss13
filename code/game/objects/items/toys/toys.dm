@@ -12,17 +12,19 @@
  * Other things
  */
 
-
 //recreational items
 
 /obj/item/toy
 	icon = 'icons/obj/items/toy.dmi'
+	item_icons = list(
+		WEAR_L_HAND = 'icons/mob/humans/onmob/inhands/items/toys_lefthand.dmi',
+		WEAR_R_HAND = 'icons/mob/humans/onmob/inhands/items/toys_righthand.dmi'
+	)
 	throwforce = 0
 	throw_speed = SPEED_VERY_FAST
 	throw_range = 20
 	force = 0
 	black_market_value = 5
-
 
 /*
  * Balloons
@@ -41,10 +43,11 @@
 	return
 
 /obj/item/toy/balloon/afterattack(atom/A as mob|obj, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
 		A.reagents.trans_to(src, 10)
-		to_chat(user, SPAN_NOTICE(" You fill the balloon with the contents of [A]."))
+		to_chat(user, SPAN_NOTICE("You fill the balloon with the contents of [A]."))
 		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
 		src.update_icon()
 	return
@@ -53,22 +56,22 @@
 	if(istype(O, /obj/item/reagent_container/glass))
 		if(O.reagents)
 			if(O.reagents.total_volume < 1)
-				to_chat(user, "The [O] is empty.")
+				to_chat(user, SPAN_WARNING("[O] is empty."))
 			else if(O.reagents.total_volume >= 1)
 				if(O.reagents.has_reagent("pacid", 1))
-					to_chat(user, "The acid chews through the balloon!")
+					to_chat(user, SPAN_WARNING("The acid chews through the balloon!"))
 					O.reagents.reaction(user)
 					qdel(src)
 				else
 					src.desc = "A translucent balloon with some form of liquid sloshing around in it."
-					to_chat(user, SPAN_NOTICE(" You fill the balloon with the contents of [O]."))
+					to_chat(user, SPAN_NOTICE("You fill the balloon with the contents of [O]."))
 					O.reagents.trans_to(src, 10)
 	src.update_icon()
 	return
 
 /obj/item/toy/balloon/launch_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
-		src.visible_message(SPAN_DANGER("The [src] bursts!"),"You hear a pop and a splash.")
+		src.visible_message(SPAN_DANGER("[src] bursts!"),"You hear a pop and a splash.")
 		src.reagents.reaction(get_turf(hit_atom))
 		for(var/atom/A in get_turf(hit_atom))
 			src.reagents.reaction(A)
@@ -93,7 +96,7 @@
 	throw_speed = SPEED_VERY_FAST
 	throw_range = 20
 	force = 0
-	icon = 'icons/obj/items/weapons/weapons.dmi'
+	icon = 'icons/obj/items/toy.dmi'
 	icon_state = "syndballoon"
 	item_state = "syndballoon"
 	w_class = SIZE_LARGE
@@ -118,24 +121,27 @@
 	icon_state = "singularity_s1"
 
 
-
 /*
  * Crayons
  */
 
 /obj/item/toy/crayon
 	name = "crayon"
-	desc = "A colourful crayon. Please refrain from eating it or putting it in your nose."
-	icon = 'icons/obj/items/crayons.dmi'
+	desc = "A colorful crayon. Please refrain from eating it or putting it in your nose."
+	icon = 'icons/obj/items/paint.dmi'
 	icon_state = "crayonred"
+	item_icons = list(
+		WEAR_AS_GARB = 'icons/mob/humans/onmob/clothing/helmet_garb/crayons.dmi',
+		)
 	w_class = SIZE_TINY
-	attack_verb = list("attacked", "coloured")
+	attack_verb = list("attacked", "colored")
 	black_market_value = 5
-	var/crayon_color = "#FF0000" //RGB
-	var/shadeColour = "#220000" //RGB
-	var/uses = 30 //0 for unlimited uses
+	var/crayon_color = COLOR_RED
+	var/shade_color = "#220000"
+	/// 0 for unlimited uses
+	var/uses = 30
 	var/instant = 0
-	var/colourName = "red" //for updateIcon purposes
+	var/colorName = "red" //for updateIcon purposes
 
 /*
  * Snap pops
@@ -237,13 +243,13 @@
 	. += "[reagents.total_volume] units of water left!"
 
 
-
 /*
  * Mech prizes
  */
 /obj/item/toy/prize
 	icon_state = "ripleytoy"
 	var/cooldown = 0
+	w_class = SIZE_TINY
 
 //all credit to skasi for toy mech fun ideas
 /obj/item/toy/prize/attack_self(mob/user)
@@ -318,12 +324,16 @@
 	desc = "Mini-Mecha action figure! Collect them all! 11/11."
 	icon_state = "phazonprize"
 
+
 /obj/item/toy/inflatable_duck
 	name = "inflatable duck"
 	desc = "No bother to sink or swim when you can just float!"
 	icon_state = "inflatable"
 	item_state = "inflatable"
-	icon = 'icons/obj/items/clothing/belts.dmi'
+	icon = 'icons/obj/items/clothing/belts/misc.dmi'
+	item_icons = list(
+		WEAR_WAIST = 'icons/mob/humans/onmob/clothing/belts/misc.dmi'
+	)
 	flags_equip_slot = SLOT_WAIST
 	black_market_value = 20
 
@@ -371,14 +381,14 @@
 	else if(sides == 20 && result == 1)
 		comment = "Ouch, bad luck."
 	icon_state = "[name][result]"
-	user.visible_message(SPAN_NOTICE("[user] has thrown [src]. It lands on [result]. [comment]"), \
-						SPAN_NOTICE("You throw [src]. It lands on a [result]. [comment]"), \
+	user.visible_message(SPAN_NOTICE("[user] has thrown [src]. It lands on [result]. [comment]"),
+						SPAN_NOTICE("You throw [src]. It lands on a [result]. [comment]"),
 						SPAN_NOTICE("You hear [src] landing on a [result]. [comment]"))
 
 /obj/item/toy/bikehorn
 	name = "bike horn"
 	desc = "A horn off of a bicycle."
-	icon = 'icons/obj/items/items.dmi'
+	icon = 'icons/obj/items/toy.dmi'
 	icon_state = "bike_horn"
 	item_state = "bike_horn"
 	throwforce = 3
@@ -398,6 +408,13 @@
 		playsound(src.loc, sound_effect, 25, 1)
 		src.add_fingerprint(user)
 		addtimer(VARSET_CALLBACK(src, spam_flag, FALSE), 2 SECONDS)
+
+// rubber duck
+/obj/item/toy/bikehorn/rubberducky
+	name = "rubber ducky"
+	desc = "Rubber ducky you're so fine, you make bathtime lots of fuuun. Rubber ducky I'm awfully fooooond of yooooouuuu~" //thanks doohl
+	icon_state = "rubberducky"
+	item_state = "rubberducky"
 
 /obj/item/computer3_part
 	name = "computer part"
@@ -474,7 +491,7 @@
 /obj/item/toy/plush
 	name = "generic plushie"
 	desc = "perfectly generic"
-	icon = 'icons/obj/items/plush.dmi'
+	icon = 'icons/obj/items/toy.dmi'
 	icon_state = "debug"
 	w_class = SIZE_SMALL
 	COOLDOWN_DECLARE(last_hug_time)
@@ -492,13 +509,14 @@
 	name = "Farwa plush"
 	desc = "A Farwa plush doll. It's soft and comforting!"
 	icon_state = "farwa"
+	item_state = "farwaplush"
 	black_market_value = 25
 
 /obj/item/toy/plush/barricade
 	name = "plushie barricade"
 	desc = "Great for squeezing whenever you're scared. Or lightly hurt. Or in any other situation."
 	icon_state = "barricade"
-	item_state = "cade_plush"
+	item_state = "plushie_cade"
 
 /obj/item/toy/plush/shark //A few more generic plushies to increase the size of the plushie loot pool
 	name = "shark plush"
@@ -591,7 +609,7 @@
 
 /obj/item/toy/plush/random_plushie/pickup(mob/user, silent)
 	. = ..()
-	RegisterSignal(user, COMSIG_POST_SPAWN_UPDATE, PROC_REF(create_plushie))
+	RegisterSignal(user, COMSIG_POST_SPAWN_UPDATE, PROC_REF(create_plushie), override = TRUE)
 
 ///The randomizer picking and spawning a plushie on either the ground or in the humans backpack. Needs var/source due to signals
 /obj/item/toy/plush/random_plushie/proc/create_plushie(datum/source)
@@ -652,6 +670,3 @@
 		icon_state = "runner_beret"
 		return
 	icon_state = "runner"
-
-/obj/item/toy/plush/shark/alt
-	icon_state = "shark_alt"

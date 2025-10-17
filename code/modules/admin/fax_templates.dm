@@ -7,7 +7,7 @@
 	dat += "body {"
 	dat += "margin:0 auto;"
 	dat += "padding:0;"
-	dat += "background-image: url('[asset.get_url_mappings()["faxbackground.jpg"]]');"
+	dat += "background-image: url('[asset.get_url_mappings()["background_white.jpg"]]');"
 	dat += "font-family: monospace;"
 	dat += "}"
 
@@ -65,12 +65,12 @@
 
 	if(show_wy_logo)
 		dat += "<div id='fax-logo'>"
-		dat += "<img src='[asset.get_url_mappings()["faxwylogo.png"]]' alt='Something fucked!'/>"
+		dat += "<img src='[asset.get_url_mappings()["logo_wy.png"]]' alt='Something fucked!'/>"
 		dat += "</div>"
 
 	dat += "<div class='message-header-text'>"
 	dat += "<p id='header-title'>[fax_header]</p>"
-	dat += "<p id='header-subtitle'>[fax_subject] - [time2text(world.realtime, "DD Month")] [game_year]</p>"
+	dat += "<p id='header-subtitle'>[fax_subject] - [time2text(world.realtime, "DD Month")] [GLOB.game_year]</p>"
 	dat += "</div> <!-- /message-header-text -->"
 
 	dat += "<div class='message-body-text'>"

@@ -1,5 +1,5 @@
-var/global/list/gear_datums_by_category = list()
-var/global/list/gear_datums_by_name = list()
+GLOBAL_LIST_EMPTY(gear_datums_by_category)
+GLOBAL_LIST_EMPTY_TYPED(gear_datums_by_name, /datum/gear)
 
 /proc/populate_gear_list()
 	var/datum/gear/G
@@ -10,16 +10,16 @@ var/global/list/gear_datums_by_name = list()
 		if(!G.category)
 			log_debug("Improper gear datum: [gear_type].")
 			continue
-		if(G.display_name in gear_datums_by_name)
+		if(G.display_name in GLOB.gear_datums_by_name)
 			log_debug("Duplicate gear datum name: [G.display_name].")
 			continue
-		LAZYSET(gear_datums_by_category[G.category], "[G.display_name] [G.cost == 1 ? "(1 point)" : "([G.cost] points)"]", G)
-		gear_datums_by_name[G.display_name] = G
+		LAZYSET(GLOB.gear_datums_by_category[G.category], "[G.display_name] [G.cost == 1 ? "(1 point)" : "([G.cost] points)"]", G)
+		GLOB.gear_datums_by_name[G.display_name] = G
 
 /datum/gear
 	var/display_name  // Name/index.
 	var/category //Used for sorting in the loadout selection.
-	var/path  // Path to item.
+	var/obj/item/path  // Path to item.
 	var/cost = 2 // Number of points used.
 	var/slot // Slot to equip to, if any.
 	var/list/allowed_roles   // Roles that can spawn with this item.
@@ -58,17 +58,30 @@ var/global/list/gear_datums_by_name = list()
 	display_name = "Ballistic goggles, black"
 	path = /obj/item/clothing/glasses/mgoggles/black
 
+/datum/gear/eyewear/goggles_black/prescription
+	display_name = "Prescription ballistic goggles, black"
+	path = /obj/item/clothing/glasses/mgoggles/black/prescription
+
 /datum/gear/eyewear/goggles_orange
 	display_name = "Ballistic goggles, orange"
 	path = /obj/item/clothing/glasses/mgoggles/orange
+
+/datum/gear/eyewear/goggles_orange/prescription
+	display_name = "Prescription ballistic goggles, orange"
+	path = /obj/item/clothing/glasses/mgoggles/orange/prescription
 
 /datum/gear/eyewear/goggles2
 	display_name = "Ballistic goggles, M1A1"
 	path = /obj/item/clothing/glasses/mgoggles/v2
 
+/datum/gear/eyewear/goggles2/prescription
+	display_name = "Prescription ballistic goggles, M1A1"
+	path = /obj/item/clothing/glasses/mgoggles/v2/prescription
+
 /datum/gear/eyewear/bimex_shades
 	display_name = "BiMex personal shades"
 	path = /obj/item/clothing/glasses/sunglasses/big
+	cost = 5
 
 /datum/gear/eyewear/sunglasses
 	display_name = "Sunglasses"
@@ -161,6 +174,18 @@ var/global/list/gear_datums_by_name = list()
 	display_name = "USCM balaclava, tan"
 	path = /obj/item/clothing/mask/rebreather/scarf/tan
 
+/datum/gear/mask/uscm/skull_balaclava_blue
+	display_name = "USCM balaclava, blue skull"
+	path = /obj/item/clothing/mask/rebreather/skull
+	cost = 4 //same as skull facepaint
+	slot = WEAR_FACE
+
+/datum/gear/mask/uscm/skull_balaclava_black
+	display_name = "USCM balaclava, black skull"
+	path = /obj/item/clothing/mask/rebreather/skull/black
+	cost = 4
+	slot = WEAR_FACE
+
 /datum/gear/headwear
 	category = "Headwear"
 	cost = 3
@@ -203,7 +228,7 @@ var/global/list/gear_datums_by_name = list()
 
 /datum/gear/headwear/uscm/beret_green
 	display_name = "USCM beret, green"
-	path = /obj/item/clothing/head/beret/cm
+	path = /obj/item/clothing/head/beret/cm/green
 
 /datum/gear/headwear/uscm/beret_tan
 	display_name = "USCM beret, tan"
@@ -350,7 +375,7 @@ var/global/list/gear_datums_by_name = list()
 	path = /obj/item/prop/helmetgarb/trimmed_wire
 
 /datum/gear/helmet_garb/bullet_pipe
-	display_name = "10x99mm XM42B casing pipe"
+	display_name = "10x99mm XM43E1 casing pipe"
 	path = /obj/item/prop/helmetgarb/bullet_pipe
 	allowed_origins = USCM_ORIGINS
 
@@ -381,7 +406,7 @@ var/global/list/gear_datums_by_name = list()
 
 /datum/gear/paperwork/pen_fountain
 	display_name = "Pen, fountain"
-	path = /obj/item/tool/pen/fountain
+	path = /obj/item/tool/pen/multicolor/fountain
 	cost = 3
 
 /datum/gear/paperwork/paper
@@ -491,6 +516,10 @@ var/global/list/gear_datums_by_name = list()
 	display_name = "Card, Uno Reverse - yellow"
 	path = /obj/item/toy/handcard/uno_reverse_yellow
 
+/datum/gear/toy/card/trading_card
+	display_name = "Card, random WeyYu Trading"
+	path = /obj/item/toy/trading_card
+
 /datum/gear/toy/deck
 	display_name = "Deck of cards, regular"
 	path = /obj/item/toy/deck
@@ -498,6 +527,10 @@ var/global/list/gear_datums_by_name = list()
 /datum/gear/toy/deck/uno
 	display_name = "Deck of cards, Uno"
 	path = /obj/item/toy/deck/uno
+
+/datum/gear/toy/trading_card
+	display_name = "Trading Card Packet"
+	path = /obj/item/storage/fancy/trading_card
 
 /datum/gear/toy/d6
 	display_name = "Die, 6 sides"
@@ -514,6 +547,10 @@ var/global/list/gear_datums_by_name = list()
 /datum/gear/toy/crayon
 	display_name = "Crayon"
 	path = /obj/item/toy/crayon/rainbow
+
+/datum/gear/toy/pride
+	display_name = "Box of Prideful Crayons"
+	path = /obj/item/storage/box/pride
 
 /datum/gear/plush
 	category = "Plushies"
@@ -851,6 +888,14 @@ var/global/list/gear_datums_by_name = list()
 	display_name = "Lighter, zippo"
 	path = /obj/item/tool/lighter/zippo
 
+/datum/gear/smoking/zippo/black
+	display_name = "Black lighter, zippo"
+	path = /obj/item/tool/lighter/zippo/black
+
+/datum/gear/smoking/zippo/blue
+	display_name = "Blue lighter, zippo"
+	path = /obj/item/tool/lighter/zippo/blue
+
 /datum/gear/smoking/electronic_cigarette
 	display_name = "Electronic cigarette"
 	path = /obj/item/clothing/mask/electronic_cigarette
@@ -875,6 +920,11 @@ var/global/list/gear_datums_by_name = list()
 /datum/gear/misc/facepaint_black
 	display_name = "Facepaint, black"
 	path = /obj/item/facepaint/black
+
+/datum/gear/misc/facepaint_skull
+	display_name = "Facepaint, skull"
+	path = /obj/item/facepaint/skull
+	cost = 3
 
 /datum/gear/misc/facepaint_body
 	display_name = "Fullbody paint"
@@ -907,6 +957,13 @@ var/global/list/gear_datums_by_name = list()
 	cost = 1 //The cadmium poisoning pays for the discounted cost longterm
 	allowed_origins = USCM_ORIGINS
 
+/datum/gear/misc/dogtags
+	display_name = "Attachable Dogtags"
+	path = /obj/item/clothing/accessory/dogtags
+	cost = 1
+	slot = WEAR_IN_ACCESSORY
+	allowed_origins = USCM_ORIGINS
+
 /datum/gear/misc/patch_uscm
 	display_name = "USCM shoulder patch"
 	path = /obj/item/clothing/accessory/patch
@@ -935,3 +992,8 @@ var/global/list/gear_datums_by_name = list()
 	display_name = "Cut-throat razor"
 	path = /obj/item/weapon/straight_razor
 	cost = 3
+
+/datum/gear/misc/watch
+	display_name = "Cheap wrist watch"
+	path = /obj/item/clothing/accessory/wrist/watch
+	cost = 1 // Cheap and crappy

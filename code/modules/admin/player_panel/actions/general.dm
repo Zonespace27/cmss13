@@ -68,16 +68,8 @@
 
 	message_admins("[key_name_admin(user)] has sent [key_name_admin(target)] back to the Lobby.")
 
-	var/mob/new_player/NP = new()
-
-	if(!target.mind)
-		target.mind_initialize()
-
-	target.mind.transfer_to(NP)
-
-	qdel(target)
+	target.send_to_lobby()
 	return TRUE
-
 
 /datum/player_action/force_say
 	action_tag = "mob_force_say"
@@ -85,7 +77,8 @@
 	permissions_required = R_ADMIN
 
 /datum/player_action/force_say/act(client/user, mob/target, list/params)
-	if(!params["to_say"]) return
+	if(!params["to_say"])
+		return
 
 	target.say(params["to_say"])
 
@@ -100,7 +93,8 @@
 	permissions_required = R_ADMIN
 
 /datum/player_action/force_emote/act(client/user, mob/target, list/params)
-	if(!params["to_emote"]) return
+	if(!params["to_emote"])
+		return
 
 	target.manual_emote(params["to_emote"])
 
